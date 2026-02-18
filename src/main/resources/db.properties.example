@@ -1,0 +1,10 @@
+! Rename this file from "db.properties.example" to "db.properties".
+! Insert your Username & Password at the specified places.
+! You First need to create the DataBase.
+! I have provided you with the query to create DataBase.
+! The query can be found in "META-INF/sql/schema.sql", walking through this folder.
+
+db.url=jdbc:mysql://localhost:3306/tasknexus?useSSL=false&serverTimezone=UTC
+db.username={Enter your DataBase Server' UserName}
+db.password={Enter your Password}
+db.driver=com.mysql.cj.jdbc.Driver
