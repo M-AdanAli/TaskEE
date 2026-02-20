@@ -1,6 +1,6 @@
 -- 1. Create the Database
-CREATE DATABASE IF NOT EXISTS tasknexus;
-USE tasknexus;
+CREATE DATABASE IF NOT EXISTS taskee;
+USE taskee;
 
 -- 2. Create Users Table
 CREATE TABLE users (
