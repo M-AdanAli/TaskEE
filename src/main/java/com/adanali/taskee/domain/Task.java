@@ -30,6 +30,8 @@ public class Task {
         this.userId = userId;
     }
 
+    public Task(){}
+
     public Long getId() {
         return id;
     }
