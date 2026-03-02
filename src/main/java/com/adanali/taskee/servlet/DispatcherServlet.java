@@ -3,6 +3,7 @@ package com.adanali.taskee.servlet;
 import com.adanali.taskee.controller.Controller;
 import com.adanali.taskee.controller.LoginController;
 import com.adanali.taskee.controller.RegistrationController;
+import com.adanali.taskee.controller.TaskListController;
 import com.adanali.taskee.exception.AuthorizationException;
 import com.adanali.taskee.exception.ServiceException;
 import com.adanali.taskee.exception.TaskNotFoundException;
@@ -40,6 +41,7 @@ public class DispatcherServlet extends HttpServlet {
     public void init(){
         controllers.put("/login", new LoginController());
         controllers.put("/register", new RegistrationController());
+        controllers.put("/tasks", new TaskListController());
     }
 
     @Override

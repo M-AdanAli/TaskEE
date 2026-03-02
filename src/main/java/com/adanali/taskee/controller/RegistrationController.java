@@ -42,6 +42,7 @@ public class RegistrationController implements Controller{
         logger.info("Registration attempt for email: {}", email);
 
         if (fullName == null || fullName.isBlank()) {
+            logger.warn("Registration failed: Blank Full Name format for {}", email);
             return showError(request, "Full Name is required.", fullName, email);
         }
 

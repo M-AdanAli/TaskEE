@@ -15,7 +15,7 @@ public class TaskServiceImpl implements TaskService{
 
     private final TaskDAO taskDAO;
 
-    TaskServiceImpl(){
+    public TaskServiceImpl(){
         taskDAO = new TaskDaoJDBCImpl();
     }
 
