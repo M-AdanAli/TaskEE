@@ -1,12 +1,12 @@
 package com.adanali.taskee.controller;
 
 import com.adanali.taskee.domain.User;
+import com.adanali.taskee.dto.SessionUser;
 import com.adanali.taskee.exception.AuthenticationException;
 import com.adanali.taskee.service.UserService;
 import com.adanali.taskee.service.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,9 +40,9 @@ public class LoginController implements Controller{
 
         try {
             User user = userService.login(email,password);
+            SessionUser sessionUser = new SessionUser(user.getId(), user.getEmail(), user.getFullName());
 
-            HttpSession session = request.getSession();
-            session.setAttribute("currentUser", user);
+            request.getSession().setAttribute("currentUser", sessionUser);
 
             logger.info("User {} logged in successfully.", user.getEmail());
             return "redirect:/tasks";

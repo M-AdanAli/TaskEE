@@ -128,6 +128,7 @@ input:focus {
 
 .brand-logo {
     text-align: center;
+    margin-top: 1rem;
     margin-bottom: 1rem;
     color: var(--primary-dark);
 }
