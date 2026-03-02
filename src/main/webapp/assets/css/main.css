@@ -1,0 +1,247 @@
+:root {
+    /* --- PALETTE --- */
+    --bg-color: #F0F2F5;       /* Light Blue-Grey */
+    --card-bg: #FFFFFF;        /* Pure White */
+    --primary-dark: #243b55;   /* Deep Navy */
+    --brand-orange: #F78C29;   /* The Logo Orange */
+    --brand-orange-hover: #e07b1e;
+
+    --text-main: #2D3748;
+    --text-muted: #718096;
+    --border-color: #E2E8F0;
+    --success-color: #38B2AC;
+    --error-color: #E53E3E;
+
+    /* --- FONTS --- */
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-code: 'JetBrains Mono', monospace;
+
+    /* --- SPACING & SHAPES --- */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-float: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* GLOBAL RESET */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-body), sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased; /* Crisp text on Mac */
+}
+
+ /*TYPOGRAPHY */
+h1, h2, h3, h4 {
+    font-family: var(--font-heading), sans-serif;
+    color: var(--primary-dark);
+    font-weight: 700;
+    letter-spacing: -0.02em; /* Tightens headers for a modern look */
+}
+
+.mono-text {
+    font-family: var(--font-code), monospace;
+    font-size: 0.9em;
+}
+
+/* LINKS */
+a { text-decoration: none; color: var(--primary-dark); transition: 0.2s; }
+a:hover { color: var(--brand-orange); }
+
+/* LAYOUT UTILS */
+.container {
+    max-width: 900px; /* Not too wide, keeps text readable */
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* COMPONENTS: BUTTONS */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-family: var(--font-body), sans-serif;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--brand-orange);
+    color: white;
+    box-shadow: 0 2px 5px rgba(247, 140, 41, 0.3); /* Orange glow */
+}
+
+.btn-primary:hover {
+    background-color: var(--brand-orange-hover);
+    transform: translateY(-1px); /* Subtle lift effect */
+}
+
+/* COMPONENTS: FORMS */
+input[type="text"], input[type="password"], input[type="email"] {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--card-bg);
+    border: 2px solid var(--border-color); /* Thicker border looks more "devy" */
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body), sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-dark); /* Focus turns blue */
+}
+
+/* COMPONENTS: CARDS (For Login & Tasks) */
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-subtle);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+}
+
+/* SPECIFIC: LOGIN PAGE */
+.login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    border-top: 5px solid var(--brand-orange); /* Nice accent bar on top */
+}
+
+.brand-logo {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--primary-dark);
+}
+
+.brand-logo p{
+    font-family: var(--font-heading), sans-serif;
+    margin-top: 2rem;
+    font-size: 3rem;
+}
+
+/* NAVBAR */
+.navbar {
+    background-color: var(--primary-dark);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    color: white;
+}
+
+.nav-brand {
+    font-family: var(--font-heading) , sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.7);
+    margin-left: 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--brand-orange);
+}
+
+/* BADGES (Status Indicators) */
+.badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-pending { background-color: #EDF2F7; color: #4A5568; }
+.badge-progress { background-color: #EBF8FF; color: #3182CE; }
+.badge-success { background-color: #F0FFF4; color: #38A169; }
+
+/* ALERTS */
+.alert {
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    border-left: 4px solid;
+}
+
+.alert-error {
+    background-color: #FFF5F5;
+    color: #C53030;
+    border-color: #FC8181;
+}
+
+.alert-success {
+    background-color: #F0FFF4;
+    color: #2F855A;
+    border-color: #68D391;
+}
+
+/* TABLES (For Dashboard) */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.table th {
+    text-align: left;
+    padding: 1rem;
+    background-color: #F7FAFC;
+    border-bottom: 2px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.95rem;
+}
+
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover { background-color: #F7FAFC; }
+
+/* UTILITY BUTTONS */
+.btn-secondary {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+}
+.btn-secondary:hover { background-color: #F7FAFC; border-color: #cbd5e0; }
+
+.btn-danger {
+    background-color: #FFF5F5;
+    color: #C53030;
+    border: 1px solid #FEB2B2;
+}
+.btn-danger:hover { background-color: #FED7D7; }
+
+.btn-sm { padding: 5px 10px; font-size: 0.85rem; }

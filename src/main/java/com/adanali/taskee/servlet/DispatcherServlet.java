@@ -1,7 +1,11 @@
 package com.adanali.taskee.servlet;
 
 import com.adanali.taskee.controller.Controller;
-import com.adanali.taskee.exception.*;
+import com.adanali.taskee.controller.LoginController;
+import com.adanali.taskee.exception.AuthorizationException;
+import com.adanali.taskee.exception.ServiceException;
+import com.adanali.taskee.exception.TaskNotFoundException;
+import com.adanali.taskee.exception.UserNotFoundException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -33,7 +37,7 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init(){
-
+        controllers.put("/login", new LoginController());
     }
 
     @Override
