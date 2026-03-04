@@ -38,13 +38,13 @@
 
                     <div class="form-group">
                         <label for="fullName">Full Name</label>
-                        <input type="text" id="fullName" name="fullName" value="${fullName}"
+                        <input type="text" id="fullName" name="fullName" maxlength="100" value="${fullName}"
                                placeholder="Enter your Full Name" required autofocus>
                     </div>
 
                     <div class="form-group" style="margin-top: 1rem">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" value="${email}"
+                        <input type="email" id="email" name="email" maxlength="255" value="${email}"
                                placeholder="Enter your E-mail" required>
                     </div>
 

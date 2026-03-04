@@ -1,9 +1,6 @@
 package com.adanali.taskee.servlet;
 
-import com.adanali.taskee.controller.Controller;
-import com.adanali.taskee.controller.LoginController;
-import com.adanali.taskee.controller.RegistrationController;
-import com.adanali.taskee.controller.TaskListController;
+import com.adanali.taskee.controller.*;
 import com.adanali.taskee.exception.AuthorizationException;
 import com.adanali.taskee.exception.ServiceException;
 import com.adanali.taskee.exception.TaskNotFoundException;
@@ -42,6 +39,13 @@ public class DispatcherServlet extends HttpServlet {
         controllers.put("/login", new LoginController());
         controllers.put("/register", new RegistrationController());
         controllers.put("/tasks", new TaskListController());
+
+        TaskController taskController = new TaskController();
+        controllers.put("/tasks/new", taskController);
+        controllers.put("/tasks/save", taskController);
+        controllers.put("/tasks/edit", taskController);
+        controllers.put("/tasks/update", taskController);
+        controllers.put("/tasks/delete", taskController);
     }
 
     @Override

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -23,7 +24,8 @@
             </div>
 
             <div class="nav-links">
-                <a href="${pageContext.request.contextPath}/logout" class="btn btn-sm btn-secondary" style="border: none;">Logout</a>
+                <a href="${pageContext.request.contextPath}/tasks" class="active">Dashboard</a>
+                <a href="${pageContext.request.contextPath}/logout" class="btn btn-sm btn-secondary" style="border: none; color: var(--text-main)">Logout</a>
             </div>
         </nav>
 
@@ -48,18 +50,17 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th style="width: 5%;">ID</th> <!-- Visual Index -->
+                            <th style="width: 10%;">ID</th>
                             <th style="width: 35%;">Title</th>
                             <th style="width: 20%;">Status</th>
                             <th style="width: 20%;">Created At</th>
-                            <th style="width: 20%; text-align: right;">Actions</th>
+                            <th style="width: 15%; text-align: right;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
 
                     <c:forEach var="task" items="${taskList}" varStatus="status">
                         <tr>
-                            // Currently generating dynamic task IDs on the user end for better UX.
                             <td class="mono-text" style="color: var(--text-muted);">
                                     #${status.count}
                             </td>
@@ -67,15 +68,15 @@
                             <td style="font-weight: 500;">${task.title}</td>
 
                             <td>
-                                <span class="badge badge-${task.status.name().toLowerCase()}">
-                                        ${task.status}
+                                <span class="badge badge-${task.taskStatus.name().toLowerCase()}">
+                                        ${task.taskStatus}
                                 </span>
                             </td>
 
                             <td style="font-size: 0.9rem; color: var(--text-muted);">
                                 <c:choose>
                                     <c:when test="${task.createdAt != null}">
-                                        ${task.createdAt.toLocalDate()}
+                                        <t:timeAgo date="${task.createdAt}" />
                                     </c:when>
                                     <c:otherwise>-</c:otherwise>
                                 </c:choose>
@@ -83,7 +84,7 @@
 
                             <td style="text-align: right;">
                                 <!-- The Real ID is used in the URL for logic -->
-                                <a href="${pageContext.request.contextPath}/tasks/edit?id=${task.id}"
+                                <a href="${pageContext.request.contextPath}/tasks/edit?id=${task.id}&vId=${status.count}"
                                    class="btn btn-sm btn-secondary">Edit</a>
 
                                 <form action="${pageContext.request.contextPath}/tasks/delete" method="post" style="display: inline;">
