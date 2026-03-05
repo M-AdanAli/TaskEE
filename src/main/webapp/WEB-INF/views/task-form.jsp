@@ -72,7 +72,7 @@
                         <label style="margin-bottom: 8px;">Status</label>
                         <div class="status-selector">
                             <input type="radio" id="status-pending" name="status" value="PENDING"
-                            ${task.taskStatus == 'PENDING' ? 'checked' : ''}>
+                            ${(task.taskStatus == 'PENDING') || (empty task) ? 'checked' : ''}>
                             <label for="status-pending">Pending</label>
                             <input type="radio" id="status-in_progress" name="status" value="IN_PROGRESS"
                             ${task.taskStatus == 'IN_PROGRESS' ? 'checked' : ''}>

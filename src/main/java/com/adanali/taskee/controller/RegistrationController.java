@@ -28,7 +28,7 @@ public class RegistrationController implements Controller{
         }
 
         if (request.getSession().getAttribute("currentUser") != null){
-            return "redirect:/tasks";
+            return "redirect:/dashboard";
         }
 
         return "register";
@@ -64,7 +64,7 @@ public class RegistrationController implements Controller{
             request.getSession().setAttribute("currentUser", sessionUser);
 
             logger.info("User registered and logged in: {}", email);
-            return "redirect:/tasks";
+            return "redirect:/dashboard";
         } catch (UserAlreadyExistsException e) {
             logger.warn("Registration failed: Email {} already exists.", email);
             return showError(request, "The email is already registered.", fullName, email);

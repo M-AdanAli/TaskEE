@@ -24,7 +24,9 @@
             </div>
 
             <div class="nav-links">
-                <a href="${pageContext.request.contextPath}/tasks" class="active">Dashboard</a>
+                <a href="${pageContext.request.contextPath}/dashboard" class="active">Dashboard</a>
+                <a href="${pageContext.request.contextPath}/tasks">My Tasks</a>
+                <a href="${pageContext.request.contextPath}/profile">Profile</a>
                 <a href="${pageContext.request.contextPath}/logout" class="btn btn-sm btn-secondary" style="border: none; color: var(--text-main)">Logout</a>
             </div>
         </nav>
@@ -32,47 +34,72 @@
         <div class="container">
 
             <div style="text-align: center; margin: 40px 0 60px 0;">
-                <h1 style="font-size: 2.5rem; margin-bottom: 3px;">Welcome back, ${userName}!</h1>
+                <h1 style="font-size: 2.5rem;">Welcome back, <span class="hero-name">${userName}</span>!</h1>
                 <p style="color: var(--text-muted); font-size: 1.3rem; letter-spacing: -0.02em;">
-                    What's in your mind for today?
+                    Here's your productivity overview...
                 </p>
             </div>
 
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Tasks</div>
+                    <div class="stat-number">${totalTasks}</div>
+                </div>
+                <div class="stat-card stat-pending">
+                    <div class="stat-label">Pending</div>
+                    <div class="stat-number">${pendingCount}</div>
+                </div>
+                <div class="stat-card stat-progress">
+                    <div class="stat-label">In Progress</div>
+                    <div class="stat-number">${progressCount}</div>
+                </div>
+                <div class="stat-card stat-completed">
+                    <div class="stat-label">Completed</div>
+                    <div class="stat-number">${completedCount}</div>
+                </div>
+            </div>
+
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="margin: 0;">My Tasks</h2>
-                <a href="${pageContext.request.contextPath}/tasks/new" class="btn btn-primary">
-                    + New Task
+                <h2 style="margin: 0;">Recent Activity</h2>
+                <a href="${pageContext.request.contextPath}/tasks" class="btn btn-primary">
+                    View All &rarrlp;
                 </a>
             </div>
 
-            <div class="card" style="padding: 0; overflow: hidden;">
-
+            <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 1rem">
                 <table class="table">
                     <thead>
-                        <tr>
-                            <th style="width: 10%;">ID</th>
-                            <th style="width: 35%;">Title</th>
-                            <th style="width: 20%;">Status</th>
-                            <th style="width: 20%;">Created At</th>
-                            <th style="width: 15%; text-align: right;">Actions</th>
-                        </tr>
+                    <tr>
+                        <th style="width: 10%;">ID</th>
+                        <th style="width: 40%;">Title</th>
+                        <th style="width: 25%;">Status</th>
+                        <th style="width: 25%;">Created</th>
+                    </tr>
                     </thead>
                     <tbody>
-
-                    <c:forEach var="task" items="${taskList}" varStatus="status">
+                    <c:forEach var="task" items="${recentTasks}" varStatus="status">
                         <tr>
-                            <td class="mono-text" style="color: var(--text-muted);">
-                                    #${status.count}
+                            <td class="mono-text" style="color: var(--text-muted)">
+                                #ID-${status.count}
                             </td>
-
-                            <td style="font-weight: 500;">${task.title}</td>
-
+                            <td style="font-weight: 500;">
+                                <a href="${pageContext.request.contextPath}/tasks/edit?id=${task.id}&vId=${status.count}" style="text-decoration: none; color: var(--text-main);" class="table-title-wrapper">
+                                    <span class="text-truncate">${task.title}</span>
+                                    <span class="edit-icon">✐</span>
+                                </a>
+                            </td>
                             <td>
                                 <span class="badge badge-${task.taskStatus.name().toLowerCase()}">
-                                        ${task.taskStatus}
+                                    <c:choose>
+                                        <c:when test="${task.taskStatus == 'IN_PROGRESS'}">
+                                            In Progress
+                                        </c:when>
+                                        <c:otherwise>
+                                            ${task.taskStatus}
+                                        </c:otherwise>
+                                    </c:choose>
                                 </span>
                             </td>
-
                             <td style="font-size: 0.9rem; color: var(--text-muted);">
                                 <c:choose>
                                     <c:when test="${task.createdAt != null}">
@@ -81,30 +108,13 @@
                                     <c:otherwise>-</c:otherwise>
                                 </c:choose>
                             </td>
-
-                            <td style="text-align: right;">
-                                <!-- The Real ID is used in the URL for logic -->
-                                <a href="${pageContext.request.contextPath}/tasks/edit?id=${task.id}&vId=${status.count}"
-                                   class="btn btn-sm btn-secondary">Edit</a>
-
-                                <form action="${pageContext.request.contextPath}/tasks/delete" method="post" style="display: inline;">
-                                    <input type="hidden" name="id" value="${task.id}">
-                                    <button type="submit" class="btn btn-sm btn-danger"
-                                            style="margin-left: 5px;"
-                                            onclick="return confirm('Delete task #${status.count}?');">
-                                        &times;
-                                    </button>
-                                </form>
-                            </td>
                         </tr>
                     </c:forEach>
-
-                    <!-- Empty State -->
-                    <c:if test="${empty taskList}">
+                    <c:if test="${empty recentTasks}">
                         <tr>
-                            <td colspan="5" style="text-align: center; padding: 4rem; color: var(--text-muted);">
-                                You have no tasks yet. <br>
-                                <a href="${pageContext.request.contextPath}/tasks/new" style="color: var(--brand-orange);">Create one now</a>
+                            <td colspan="4" style="text-align: center; padding: 5rem;">
+                                You have no tasks yet :( <br>
+                                <a href="${pageContext.request.contextPath}/tasks/new" style="color: var(--brand-orange);text-decoration: underline;">Create one now</a>
                             </td>
                         </tr>
                     </c:if>

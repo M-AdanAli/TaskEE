@@ -26,7 +26,7 @@ public class LoginController implements Controller{
         }
 
         if (request.getSession().getAttribute("currentUser") != null){
-            return "redirect:/tasks";
+            return "redirect:/dashboard";
         }
 
         return "login";
@@ -45,7 +45,7 @@ public class LoginController implements Controller{
             request.getSession().setAttribute("currentUser", sessionUser);
 
             logger.info("User {} logged in successfully.", user.getEmail());
-            return "redirect:/tasks";
+            return "redirect:/dashboard";
         }catch (AuthenticationException e){
             logger.warn("Login attempt failed for {}: {}",email, e.getMessage());
             request.setAttribute("errorMessage","Invalid email or password.");

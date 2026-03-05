@@ -37,6 +37,6 @@ public class TaskListController implements Controller{
         req.setAttribute("taskList", userTasks);
         req.setAttribute("userName", user.fullName());
 
-        return "dashboard";
+        return "my-tasks";
     }
 }

@@ -38,6 +38,7 @@ public class DispatcherServlet extends HttpServlet {
     public void init(){
         controllers.put("/login", new LoginController());
         controllers.put("/register", new RegistrationController());
+        controllers.put("/dashboard", new DashboardController());
         controllers.put("/tasks", new TaskListController());
 
         TaskController taskController = new TaskController();

@@ -24,13 +24,12 @@ public class TaskController implements Controller{
         // TODO: Security check using Filters
         SessionUser user = (SessionUser) request.getSession().getAttribute("currentUser");
         if (user == null) {
-            logger.info("An unknown User tried to Edit a Task");
+            logger.info("An Unknown User tried to manipulate Tasks");
             return "redirect:/login";
         }
 
         String completePath = request.getServletPath() +
                 (request.getPathInfo() != null ? request.getPathInfo() : "");
-        logger.info(completePath);
         return switch (completePath) {
             case "/tasks/new" -> showCreateForm(request);
             case "/tasks/save" -> saveTask(request, user.id());
