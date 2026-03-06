@@ -23,12 +23,7 @@ public class DashboardController implements Controller{
     @Override
     public String handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        // TODO: Security check using Filters
         SessionUser user = (SessionUser) request.getSession().getAttribute("currentUser");
-        if (user == null) {
-            logger.info("An unknown User tried to fetch Dashboard Metrics");
-            return "redirect:/login";
-        }
 
         logger.info("Dashboard Metrics fetching attempt for email: {}", user.email());
         List<Task> allTasks = taskService.getAll(user.id());

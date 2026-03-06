@@ -26,10 +26,6 @@ public class TaskListController implements Controller{
 
         // TODO: Security check using Filters
         SessionUser user = (SessionUser) request.getSession().getAttribute("currentUser");
-        if (user == null) {
-            logger.info("An unknown User tried to fetch tasks.");
-            return "redirect:/login";
-        }
 
         String statusParameter = request.getParameter("status");
         List<Task> tasks;

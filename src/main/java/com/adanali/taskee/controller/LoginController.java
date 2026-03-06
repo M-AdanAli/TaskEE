@@ -29,6 +29,11 @@ public class LoginController implements Controller{
             return "redirect:/dashboard";
         }
 
+        String errorCode = request.getParameter("error");
+        if ("auth".equals(errorCode)) {
+            request.setAttribute("errorMessage", "Please login first !");
+        }
+
         return "login";
     }
 

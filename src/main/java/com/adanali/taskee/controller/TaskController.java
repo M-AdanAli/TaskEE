@@ -23,10 +23,6 @@ public class TaskController implements Controller{
 
         // TODO: Security check using Filters
         SessionUser user = (SessionUser) request.getSession().getAttribute("currentUser");
-        if (user == null) {
-            logger.info("An Unknown User tried to manipulate Tasks");
-            return "redirect:/login";
-        }
 
         String completePath = request.getServletPath() +
                 (request.getPathInfo() != null ? request.getPathInfo() : "");
