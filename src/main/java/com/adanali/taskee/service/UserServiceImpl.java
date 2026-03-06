@@ -58,7 +58,6 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-    // TODO: I'll have to figure out later whether to allow email changes or not.
     @Override
     public void updateProfile(User user) {
         try {
@@ -66,7 +65,6 @@ public class UserServiceImpl implements UserService{
                     .orElseThrow(() -> new UserNotFoundException(user.getEmail()));
 
             existing.setFullName(user.getFullName());
-            existing.setEmail(user.getEmail());
 
             userDAO.update(existing);
         } catch (SQLException e) {

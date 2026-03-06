@@ -28,6 +28,11 @@
 
                 <h2 style="text-align: center; margin-bottom: 1.5rem;">Welcome Back !</h2>
 
+                <c:if test="${param.logout}">
+                    <div class="alert alert-success" style="text-align: center;">
+                        You have been logged out successfully.
+                    </div>
+                </c:if>
                 <c:if test="${not empty errorMessage}">
                     <div class="alert alert-error">
                         <strong>Error:</strong> ${errorMessage}

@@ -21,6 +21,9 @@ import java.util.Map;
                 "/login",
                 "/logout",
                 "/register",
+                "/profile",
+                "/profile/update",
+                "/profile/password",
                 "/dashboard",
                 "/tasks",
                 "/tasks/new",
@@ -39,6 +42,7 @@ public class DispatcherServlet extends HttpServlet {
     public void init(){
         controllers.put("/login", new LoginController());
         controllers.put("/register", new RegistrationController());
+        controllers.put("/logout", new LogoutController());
         controllers.put("/dashboard", new DashboardController());
         controllers.put("/tasks", new TaskListController());
 
@@ -49,6 +53,11 @@ public class DispatcherServlet extends HttpServlet {
         controllers.put("/tasks/update", taskController);
         controllers.put("/tasks/status", taskController);
         controllers.put("/tasks/delete", taskController);
+
+        ProfileController profileController = new ProfileController();
+        controllers.put("/profile", profileController);
+        controllers.put("/profile/update", profileController);
+        controllers.put("/profile/password", profileController);
     }
 
     @Override
