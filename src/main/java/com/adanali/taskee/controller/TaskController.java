@@ -35,6 +35,7 @@ public class TaskController implements Controller{
             case "/tasks/save" -> saveTask(request, user.id());
             case "/tasks/edit" -> showEditForm(request, user.id());
             case "/tasks/update" -> updateTask(request, user.id());
+            case "/tasks/status" -> updateStatus(request, user.id());
             case "/tasks/delete" -> deleteTask(request, user.id());
             default -> "redirect:/tasks";
         };
@@ -82,7 +83,13 @@ public class TaskController implements Controller{
         }
 
         taskService.createTask(task);
-        return "redirect:/tasks";
+
+        String source = request.getParameter("source");
+        if (source.equalsIgnoreCase("dashboard")) {
+            return "redirect:/dashboard";
+        } else {
+            return "redirect:/tasks";
+        }
     }
 
     private String updateTask(HttpServletRequest request, Long userId) {
@@ -117,7 +124,30 @@ public class TaskController implements Controller{
         }
 
         taskService.updateTask(task);
-        return "redirect:/tasks";
+
+        String source = request.getParameter("source");
+        if (source.equalsIgnoreCase("dashboard")) {
+            return "redirect:/dashboard";
+        } else {
+            return "redirect:/tasks";
+        }
+    }
+
+    private String updateStatus(HttpServletRequest request, Long userId) {
+        if (!request.getMethod().equalsIgnoreCase("POST")) return "redirect:/tasks";
+
+        try {
+            Long id = Long.parseLong(request.getParameter("id"));
+            String statusString = request.getParameter("status");
+            TaskStatus newStatus = TaskStatus.valueOf(statusString);
+
+            taskService.updateTaskStatus(id, userId, newStatus);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+
+        String referer = request.getHeader("Referer");
+        return "redirect:" + (referer != null && referer.contains("dashboard") ? "/dashboard" : "/tasks");
     }
 
     private String deleteTask(HttpServletRequest request, Long userId) {
@@ -126,7 +156,12 @@ public class TaskController implements Controller{
         Long id = Long.parseLong(request.getParameter("id"));
         taskService.delete(id, userId);
 
-        return "redirect:/tasks";
+        String source = request.getParameter("source");
+        if (source.equalsIgnoreCase("dashboard")) {
+            return "redirect:/dashboard";
+        } else {
+            return "redirect:/tasks";
+        }
     }
 
     private String showFormWithError(HttpServletRequest request, String error, String title, String desc, Long id) {

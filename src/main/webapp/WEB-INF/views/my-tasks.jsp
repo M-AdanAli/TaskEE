@@ -39,6 +39,24 @@
                     + Create New Task
                 </a>
             </div>
+            <div class="filter-bar">
+                <a href="${pageContext.request.contextPath}/tasks"
+                   class="filter-btn ${activeFilter == 'ALL' ? 'active' : ''}">
+                    All Tasks
+                </a>
+                <a href="${pageContext.request.contextPath}/tasks?status=PENDING"
+                   class="filter-btn ${activeFilter == 'PENDING' ? 'active' : ''}">
+                    Pending
+                </a>
+                <a href="${pageContext.request.contextPath}/tasks?status=IN_PROGRESS"
+                   class="filter-btn ${activeFilter == 'IN_PROGRESS' ? 'active' : ''}">
+                    In Progress
+                </a>
+                <a href="${pageContext.request.contextPath}/tasks?status=COMPLETED"
+                   class="filter-btn ${activeFilter == 'COMPLETED' ? 'active' : ''}">
+                    Completed
+                </a>
+            </div>
             <div class="task-grid">
                 <c:forEach var="task" items="${taskList}" varStatus="status">
                     <div class="task-card">
@@ -79,10 +97,43 @@
                                     <span><strong>Updated: </strong><t:timeAgo date="${task.updatedAt}" /></span>
                                 </c:if>
                             </div>
-                            <a href="${pageContext.request.contextPath}/tasks/edit?id=${task.id}&vId=${status.count}"
-                               class="btn btn-sm btn-secondary">
-                                Open Details
-                            </a>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <c:if test="${task.taskStatus == 'PENDING'}">
+                                    <form action="${pageContext.request.contextPath}/tasks/status" method="post" style="margin:0;">
+                                        <input type="hidden" name="id" value="${task.id}">
+                                        <input type="hidden" name="status" value="IN_PROGRESS">
+                                        <button type="submit" class="btn btn-sm" style="background: #EBF8FF; color: #3182CE; border: 1px solid #90CDF4; font-weight: 600;" title="Mark In Progress">
+                                            Start &#10095;
+                                        </button>
+                                    </form>
+                                </c:if>
+                                <c:if test="${task.taskStatus == 'IN_PROGRESS'}">
+                                    <form action="${pageContext.request.contextPath}/tasks/status" method="post" style="margin:0;">
+                                        <input type="hidden" name="id" value="${task.id}">
+                                        <input type="hidden" name="status" value="COMPLETED">
+                                        <button type="submit" class="btn btn-sm" style="background: #F0FFF4; color: #38A169; border: 1px solid #9AE6B4; font-weight: 600;" title="Mark Completed">
+                                            &#10003; Done
+                                        </button>
+                                    </form>
+                                </c:if>
+                                <c:if test="${task.taskStatus == 'COMPLETED'}">
+                                    <form action="${pageContext.request.contextPath}/tasks/delete" method="post" style="margin:0;">
+                                        <input type="hidden" name="id" value="${task.id}">
+                                        <!-- Ensure we stay on the tasks page after delete -->
+                                        <input type="hidden" name="source" value="tasks">
+                                        <button type="submit" class="btn btn-sm"
+                                                style="background: #FFF5F5; color: #C53030; border: 1px solid #FEB2B2; font-weight: 600;"
+                                                title="Delete Task"
+                                                onclick="return confirm('Delete this completed task?');">
+                                            &times; Delete
+                                        </button>
+                                    </form>
+                                </c:if>
+                                <a href="${pageContext.request.contextPath}/tasks/edit?id=${task.id}&vId=${status.count}&source=tasks"
+                                   class="btn btn-sm btn-secondary">
+                                    Edit Details
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </c:forEach>
@@ -90,8 +141,16 @@
 
             <c:if test="${empty taskList}">
                 <div style="text-align: center; padding: 8rem; background: white; border: 1px solid var(--border-color);border-radius: var(--radius-md); box-shadow: var(--shadow-subtle); font-size: 0.95rem;">
-                    <p>You have no tasks yet :(</p>
-                    <a href="${pageContext.request.contextPath}/tasks/new" style="color: var(--brand-orange); text-decoration: underline;">Create one now</a>
+                    <c:choose>
+                        <c:when test="${not empty activeFilter && activeFilter != 'ALL'}">
+                            <p>No '${activeFilter.replace('_', ' ')}' tasks found !</p>
+                            <a href="${pageContext.request.contextPath}/tasks" style="color: var(--brand-orange); text-decoration: underline;">View All Tasks</a>
+                        </c:when>
+                        <c:otherwise>
+                            <p>You have no tasks yet :(</p>
+                            <a href="${pageContext.request.contextPath}/tasks/new" style="color: var(--brand-orange); text-decoration: underline;">Create one now</a>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </c:if>
 

@@ -27,6 +27,7 @@ import java.util.Map;
                 "/tasks/save",
                 "/tasks/edit",
                 "/tasks/update",
+                "/tasks/status",
                 "/tasks/delete"
         }
 )
@@ -46,6 +47,7 @@ public class DispatcherServlet extends HttpServlet {
         controllers.put("/tasks/save", taskController);
         controllers.put("/tasks/edit", taskController);
         controllers.put("/tasks/update", taskController);
+        controllers.put("/tasks/status", taskController);
         controllers.put("/tasks/delete", taskController);
     }
 

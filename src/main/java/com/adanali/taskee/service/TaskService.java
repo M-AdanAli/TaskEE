@@ -19,4 +19,6 @@ public interface TaskService {
 
     Task getById(Long taskId, Long userId);
 
+    List<Task> getTasksByStatus(Long userId, TaskStatus status);
+
 }

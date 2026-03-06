@@ -109,4 +109,13 @@ public class TaskServiceImpl implements TaskService{
             throw new ServiceException("Failed to retrieve the Task.", e);
         }
     }
+
+    @Override
+    public List<Task> getTasksByStatus(Long userId, TaskStatus status) {
+        try {
+            return taskDAO.findAllByUserIdAndStatus(userId, status);
+        } catch (SQLException e) {
+            throw new ServiceException("Failed to filter tasks.", e);
+        }
+    }
 }

@@ -27,6 +27,10 @@
 /* GLOBAL RESET */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html {
+    scrollbar-gutter: stable;
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
@@ -350,7 +354,7 @@ input:focus {
 
 .stat-card:hover{
     transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-float);
     border-color: #cbd5e0;
 }
 
@@ -473,4 +477,37 @@ input:focus {
 
 .table tr:hover .edit-icon {
     opacity: 1;
+}
+
+/* --- FILTER BAR --- */
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+    overflow-x: auto;
+}
+
+.filter-btn {
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background-color: transparent;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.filter-btn:hover {
+    background-color: #e2e8f0;
+    color: var(--text-main);
+}
+
+.filter-btn.active {
+    background-color: var(--primary-dark);
+    color: white;
+    box-shadow: 0 2px 4px rgba(36, 59, 85, 0.3);
 }

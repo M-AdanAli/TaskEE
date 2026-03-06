@@ -41,22 +41,22 @@
             </div>
 
             <div class="stats-grid">
-                <div class="stat-card">
+                <a href="${pageContext.request.contextPath}/tasks" class="stat-card" style="text-decoration: none;">
                     <div class="stat-label">Total Tasks</div>
                     <div class="stat-number">${totalTasks}</div>
-                </div>
-                <div class="stat-card stat-pending">
+                </a>
+                <a href="${pageContext.request.contextPath}/tasks?status=PENDING" class="stat-card stat-pending" style="text-decoration: none;">
                     <div class="stat-label">Pending</div>
                     <div class="stat-number">${pendingCount}</div>
-                </div>
-                <div class="stat-card stat-progress">
+                </a>
+                <a href="${pageContext.request.contextPath}/tasks?status=IN_PROGRESS" class="stat-card stat-progress" style="text-decoration: none;">
                     <div class="stat-label">In Progress</div>
                     <div class="stat-number">${progressCount}</div>
-                </div>
-                <div class="stat-card stat-completed">
+                </a>
+                <a href="${pageContext.request.contextPath}/tasks?status=COMPLETED" class="stat-card stat-completed" style="text-decoration: none;">
                     <div class="stat-label">Completed</div>
                     <div class="stat-number">${completedCount}</div>
-                </div>
+                </a>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -71,9 +71,10 @@
                     <thead>
                     <tr>
                         <th style="width: 10%;">ID</th>
-                        <th style="width: 40%;">Title</th>
-                        <th style="width: 25%;">Status</th>
-                        <th style="width: 25%;">Created</th>
+                        <th style="width: 30%;">Title</th>
+                        <th style="width: 20%;">Status</th>
+                        <th style="width: 20%;">Created</th>
+                        <th style="width: 20%;">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -83,7 +84,7 @@
                                 #ID-${status.count}
                             </td>
                             <td style="font-weight: 500;">
-                                <a href="${pageContext.request.contextPath}/tasks/edit?id=${task.id}&vId=${status.count}" style="text-decoration: none; color: var(--text-main);" class="table-title-wrapper">
+                                <a href="${pageContext.request.contextPath}/tasks/edit?id=${task.id}&vId=${status.count}&source=dashboard" style="text-decoration: none; color: var(--text-main);" class="table-title-wrapper">
                                     <span class="text-truncate">${task.title}</span>
                                     <span class="edit-icon">✐</span>
                                 </a>
@@ -108,13 +109,46 @@
                                     <c:otherwise>-</c:otherwise>
                                 </c:choose>
                             </td>
+                            <td>
+                                <c:if test="${task.taskStatus == 'PENDING'}">
+                                    <form action="${pageContext.request.contextPath}/tasks/status" method="post" style="margin:0;">
+                                        <input type="hidden" name="id" value="${task.id}">
+                                        <input type="hidden" name="status" value="IN_PROGRESS">
+                                        <button type="submit" class="btn btn-sm" style="background: #EBF8FF; color: #3182CE; border: 1px solid #90CDF4; font-weight: 600;" title="Mark In Progress">
+                                             Start &#10095;
+                                        </button>
+                                    </form>
+                                </c:if>
+                                <c:if test="${task.taskStatus == 'IN_PROGRESS'}">
+                                    <form action="${pageContext.request.contextPath}/tasks/status" method="post" style="margin:0;">
+                                        <input type="hidden" name="id" value="${task.id}">
+                                        <input type="hidden" name="status" value="COMPLETED">
+                                        <button type="submit" class="btn btn-sm" style="background: #F0FFF4; color: #38A169; border: 1px solid #9AE6B4; font-weight: 600;" title="Mark Completed">
+                                              &#10003; Done
+                                        </button>
+                                    </form>
+                                </c:if>
+                                <c:if test="${task.taskStatus == 'COMPLETED'}">
+                                    <form action="${pageContext.request.contextPath}/tasks/delete" method="post" style="margin:0;">
+                                        <input type="hidden" name="id" value="${task.id}">
+                                        <!-- Ensure we stay on the tasks page after delete -->
+                                        <input type="hidden" name="source" value="tasks">
+                                        <button type="submit" class="btn btn-sm"
+                                                style="background: #FFF5F5; color: #C53030; border: 1px solid #FEB2B2; font-weight: 600;"
+                                                title="Delete Task"
+                                                onclick="return confirm('Delete this completed task?');">
+                                            &times; Delete
+                                        </button>
+                                    </form>
+                                </c:if>
+                            </td>
                         </tr>
                     </c:forEach>
                     <c:if test="${empty recentTasks}">
                         <tr>
-                            <td colspan="4" style="text-align: center; padding: 5rem;">
+                            <td colspan="5" style="text-align: center; padding: 5rem;">
                                 You have no tasks yet :( <br>
-                                <a href="${pageContext.request.contextPath}/tasks/new" style="color: var(--brand-orange);text-decoration: underline;">Create one now</a>
+                                <a href="${pageContext.request.contextPath}/tasks/new?source=dashboard" style="color: var(--brand-orange);text-decoration: underline;">Create one now</a>
                             </td>
                         </tr>
                     </c:if>
