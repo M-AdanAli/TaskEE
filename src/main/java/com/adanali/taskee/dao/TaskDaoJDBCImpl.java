@@ -126,6 +126,34 @@ public class TaskDaoJDBCImpl implements TaskDAO{
         return 0;
     }
 
+    @Override
+    public long countAllGlobalTasks() throws SQLException {
+        try (Connection connection = DBConnectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.COUNT_ALL_GLOBALLY.getQuery())){
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()){
+                    return resultSet.getLong(1);
+                }
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public long countCompletedGlobalTasks() throws SQLException {
+        try (Connection connection = DBConnectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.COUNT_COMPLETED_GLOBALLY.getQuery())){
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()){
+                    return resultSet.getLong(1);
+                }
+            }
+        }
+        return 0;
+    }
+
     // Helper methods:
 
     private List<Task> executeQuery(PreparedStatement preparedStatement) throws SQLException {

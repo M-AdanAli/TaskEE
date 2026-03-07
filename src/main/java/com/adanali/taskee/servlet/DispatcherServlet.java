@@ -31,7 +31,8 @@ import java.util.Map;
                 "/tasks/edit",
                 "/tasks/update",
                 "/tasks/status",
-                "/tasks/delete"
+                "/tasks/delete",
+                "/admin"
         }
 )
 public class DispatcherServlet extends HttpServlet {
@@ -58,6 +59,8 @@ public class DispatcherServlet extends HttpServlet {
         controllers.put("/profile", profileController);
         controllers.put("/profile/update", profileController);
         controllers.put("/profile/password", profileController);
+
+        controllers.put("/admin", new AdminController());
     }
 
     @Override

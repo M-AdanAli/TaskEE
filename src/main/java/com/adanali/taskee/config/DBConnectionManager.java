@@ -9,9 +9,11 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class DBConnectionManager {
-    private static final HikariDataSource dataSource;
+    private static HikariDataSource dataSource;
 
-    static {
+    public static synchronized void init(){
+        if (dataSource != null) return;
+
         // IMPORTANT : Check out "src/main/resources/db.properties.example" File
 
         // Loading the external properties to get DB Credentials
@@ -44,6 +46,9 @@ public class DBConnectionManager {
     }
 
     public static Connection getConnection() throws SQLException {
+        if (dataSource == null) {
+            throw new SQLException("DataSource is not initialized.");
+        }
         return dataSource.getConnection();
     }
 

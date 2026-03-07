@@ -118,4 +118,22 @@ public class TaskServiceImpl implements TaskService{
             throw new ServiceException("Failed to filter tasks.", e);
         }
     }
+
+    @Override
+    public long countGlobalAllTasks() {
+        try {
+            return taskDAO.countAllGlobalTasks();
+        } catch (SQLException e) {
+            throw new ServiceException("Failed to count all global tasks.", e);
+        }
+    }
+
+    @Override
+    public long countGlobalCompletedTasks() {
+        try {
+            return taskDAO.countCompletedGlobalTasks();
+        } catch (SQLException e) {
+            throw new ServiceException("Failed to count completed global tasks.", e);
+        }
+    }
 }

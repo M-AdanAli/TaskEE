@@ -13,7 +13,11 @@ public enum TaskQuery {
 
     FIND_BY_USER_AND_STATUS("SELECT * FROM tasks WHERE user_id = ? AND status = ? ORDER BY created_at DESC"),
 
-    COUNT_BY_USER("SELECT COUNT(*) FROM tasks WHERE user_id = ?");
+    COUNT_BY_USER("SELECT COUNT(*) FROM tasks WHERE user_id = ?"),
+
+    COUNT_ALL_GLOBALLY("SELECT COUNT(*) FROM tasks"),
+
+    COUNT_COMPLETED_GLOBALLY("SELECT COUNT(*) FROM tasks WHERE status='COMPLETED'");
 
     private final String query;
 

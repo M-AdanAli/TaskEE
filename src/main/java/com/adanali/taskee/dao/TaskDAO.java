@@ -27,4 +27,8 @@ public interface TaskDAO {
 
     // Utility Method: For Dashboard Stats
     int countByUserId(Long userId) throws SQLException;
+
+    long countAllGlobalTasks() throws SQLException;
+
+    long countCompletedGlobalTasks() throws SQLException;
 }

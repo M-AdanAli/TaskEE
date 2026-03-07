@@ -21,4 +21,7 @@ public interface TaskService {
 
     List<Task> getTasksByStatus(Long userId, TaskStatus status);
 
+    long countGlobalAllTasks();
+
+    long countGlobalCompletedTasks();
 }

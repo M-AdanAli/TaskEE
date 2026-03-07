@@ -22,7 +22,8 @@ public class AuthenticationFilter implements Filter {
             "/register",
             "/logout",
             "/assets",
-            "/index.jsp"
+            "/index.jsp",
+            "/admin"
     );
 
     @Override
