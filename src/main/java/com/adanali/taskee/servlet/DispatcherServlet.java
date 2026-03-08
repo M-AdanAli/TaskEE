@@ -84,18 +84,12 @@ public class DispatcherServlet extends HttpServlet {
                 request.getRequestDispatcher(jspPath).forward(request, response);
             }
         }catch (UserNotFoundException | TaskNotFoundException e) {
-            // 404: Resource missing
             response.sendError(404, e.getMessage());
         } catch (AuthorizationException e) {
-            // 403: Forbidden (Security)
             response.sendError(403, e.getMessage());
         } catch (ServiceException e) {
-            // 500: Generic Business/DB Error
-            e.printStackTrace();
             response.sendError(500, "Internal System Error: " + e.getMessage());
         } catch (Exception e) {
-            // 500: Unexpected Java Error
-            e.printStackTrace();
             throw new ServletException("Unexpected Error", e);
         }
     }
