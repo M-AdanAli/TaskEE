@@ -24,7 +24,6 @@ public class TaskListController implements Controller{
     @Override
     public String handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        // TODO: Security check using Filters
         SessionUser user = (SessionUser) request.getSession().getAttribute("currentUser");
 
         String statusParameter = request.getParameter("status");

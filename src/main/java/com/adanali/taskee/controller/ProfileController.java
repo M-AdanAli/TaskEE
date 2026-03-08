@@ -23,7 +23,6 @@ public class ProfileController implements Controller{
     @Override
     public String handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        // TODO: Security check using Filters
         SessionUser user = (SessionUser) request.getSession().getAttribute("currentUser");
 
         String path = request.getServletPath() + (request.getPathInfo() != null ? request.getPathInfo() : "");

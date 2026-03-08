@@ -80,6 +80,7 @@ public class DispatcherServlet extends HttpServlet {
                 String redirectPath = request.getContextPath() + viewName.substring(9);
                 response.sendRedirect(redirectPath);
             } else {
+                setActivePage(request, viewName);
                 String jspPath = "/WEB-INF/views/" + viewName + ".jsp";
                 request.getRequestDispatcher(jspPath).forward(request, response);
             }
@@ -91,6 +92,23 @@ public class DispatcherServlet extends HttpServlet {
             response.sendError(500, "Internal System Error: " + e.getMessage());
         } catch (Exception e) {
             throw new ServletException("Unexpected Error", e);
+        }
+    }
+
+    private void setActivePage(HttpServletRequest request, String viewName) {
+        switch (viewName) {
+            case "dashboard":
+                request.setAttribute("activePage", "dashboard");
+                break;
+            case "my-tasks":
+            case "task-form":
+                request.setAttribute("activePage", "tasks");
+                break;
+            case "profile":
+                request.setAttribute("activePage", "profile");
+                break;
+            default:
+                break;
         }
     }
 }

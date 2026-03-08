@@ -16,19 +16,7 @@
     </head>
     <body>
 
-        <nav class="navbar">
-            <div class="nav-brand">
-                <img src="${pageContext.request.contextPath}/assets/images/logo.png"
-                     alt="TaskEE Logo"
-                     style="height: 50px; width: auto;">
-                <span>TaskEE</span>
-            </div>
-
-            <div class="nav-links">
-                <a href="${pageContext.request.contextPath}/tasks">Dashboard</a>
-                <a href="${pageContext.request.contextPath}/logout" class="btn btn-sm btn-secondary" style="border: none; color: var(--text-main)">Logout</a>
-            </div>
-        </nav>
+        <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
         <div class="container" style="max-width: 700px; margin-top: 60px;">
 

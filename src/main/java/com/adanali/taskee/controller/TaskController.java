@@ -21,7 +21,6 @@ public class TaskController implements Controller{
     @Override
     public String handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        // TODO: Security check using Filters
         SessionUser user = (SessionUser) request.getSession().getAttribute("currentUser");
 
         String completePath = request.getServletPath() +
@@ -59,7 +58,6 @@ public class TaskController implements Controller{
 
         String title = request.getParameter("title");
         String description = request.getParameter("description");
-        // TODO: Will only provide the "PENDING" "IN PROGRESS" options at the time of creation
         String statusString = request.getParameter("status");
 
         if (title == null || title.isBlank() || title.length() > 150) {
