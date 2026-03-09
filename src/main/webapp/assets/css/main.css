@@ -512,3 +512,37 @@ input:focus {
     color: white;
     box-shadow: 0 2px 4px rgba(36, 59, 85, 0.3);
 }
+
+/* --- Flexbox & Layout --- */
+.d-flex { display: flex; }
+.flex-between { justify-content: space-between; }
+.flex-center { justify-content: center; }
+.align-center { align-items: center; }
+.align-end { align-items: flex-end; }
+
+/* Gap Utilities */
+.gap-1 { gap: 0.5rem; }
+
+/* --- Spacing (Margins & Padding) --- */
+/* Top Margins */
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+.mt-5 { margin-top: 3rem; }
+
+/* Bottom Margins */
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+.mb-6 { margin-bottom: 4rem}
+
+/* Vertical Padding */
+.pb-2 { padding-bottom: 2rem; }
+
+/* --- Typography & Borders --- */
+.text-center { text-align: center; }
+.text-muted { color: var(--text-muted); }
+.text-main { color: var(--text-main)}
+.font-bold { font-weight: 600; }
+.no-decoration { text-decoration: none; color: inherit; }

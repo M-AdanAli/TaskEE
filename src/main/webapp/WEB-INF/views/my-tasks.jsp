@@ -6,7 +6,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>My Tasks - TaskEE</title>
+        <title>My Tasks | TaskEE</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/main.css">
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,10 +17,10 @@
         <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
         <div class="container">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; margin-top: 2rem;">
+            <div class="d-flex flex-between align-center mt-4 mb-4">
                 <div>
                     <h2 style="color: var(--primary-dark); margin: 0;">My Tasks</h2>
-                    <p style="color: var(--text-muted);">Manage and track your work...</p>
+                    <p class="text-muted">Manage and track your work...</p>
                 </div>
                 <a href="${pageContext.request.contextPath}/tasks/new" class="btn btn-primary">
                     + Create New Task
@@ -54,13 +54,12 @@
                                 <c:otherwise>${task.taskStatus}</c:otherwise>
                             </c:choose>
                         </span>
-                            <span class="mono-text" style="color: #a0aec0; font-size: 0.85rem;">
+                            <span class="mono-text text-muted" style="font-size: 0.85rem;">
                             #ID-${status.count}
                             </span>
                         </div>
                         <h3 class="card-title">
-                            <a href="${pageContext.request.contextPath}/tasks/edit?id=${task.id}&vId=${status.count}"
-                               style="text-decoration: none; color: inherit;">
+                            <a href="${pageContext.request.contextPath}/tasks/edit?id=${task.id}&vId=${status.count}" class="no-decoration">
                                     ${task.title}
                             </a>
                         </h3>
@@ -84,12 +83,12 @@
                                     <span><strong>Updated: </strong><t:timeAgo date="${task.updatedAt}" /></span>
                                 </c:if>
                             </div>
-                            <div style="display: flex; gap: 8px; align-items: center;">
+                            <div class="d-flex align-center gap-1">
                                 <c:if test="${task.taskStatus == 'PENDING'}">
                                     <form action="${pageContext.request.contextPath}/tasks/status" method="post" style="margin:0;">
                                         <input type="hidden" name="id" value="${task.id}">
                                         <input type="hidden" name="status" value="IN_PROGRESS">
-                                        <button type="submit" class="btn btn-sm" style="background: #EBF8FF; color: #3182CE; border: 1px solid #90CDF4; font-weight: 600;" title="Mark In Progress">
+                                        <button type="submit" class="btn btn-sm font-bold" style="background: #EBF8FF; color: #3182CE; border: 1px solid #90CDF4;" title="Mark In Progress">
                                             Start &#10095;
                                         </button>
                                     </form>
@@ -98,7 +97,7 @@
                                     <form action="${pageContext.request.contextPath}/tasks/status" method="post" style="margin:0;">
                                         <input type="hidden" name="id" value="${task.id}">
                                         <input type="hidden" name="status" value="COMPLETED">
-                                        <button type="submit" class="btn btn-sm" style="background: #F0FFF4; color: #38A169; border: 1px solid #9AE6B4; font-weight: 600;" title="Mark Completed">
+                                        <button type="submit" class="btn btn-sm font-bold" style="background: #F0FFF4; color: #38A169; border: 1px solid #9AE6B4;" title="Mark Completed">
                                             &#10003; Done
                                         </button>
                                     </form>
@@ -106,10 +105,9 @@
                                 <c:if test="${task.taskStatus == 'COMPLETED'}">
                                     <form action="${pageContext.request.contextPath}/tasks/delete" method="post" style="margin:0;">
                                         <input type="hidden" name="id" value="${task.id}">
-                                        <!-- Ensure we stay on the tasks page after delete -->
                                         <input type="hidden" name="source" value="tasks">
-                                        <button type="submit" class="btn btn-sm"
-                                                style="background: #FFF5F5; color: #C53030; border: 1px solid #FEB2B2; font-weight: 600;"
+                                        <button type="submit" class="btn btn-sm font-bold"
+                                                style="background: #FFF5F5; color: #C53030; border: 1px solid #FEB2B2;"
                                                 title="Delete Task"
                                                 onclick="return confirm('Delete this completed task?');">
                                             &times; Delete

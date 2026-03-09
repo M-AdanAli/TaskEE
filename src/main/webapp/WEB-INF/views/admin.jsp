@@ -62,24 +62,24 @@
                 <div class="metric-card" style="border-color: #E53E3E;">
                     <div class="metric-label">Memory Usage</div>
                     <div class="metric-val">${usedMemory} <span style="font-size: 1rem;">MB</span></div>
-                    <small style="color: var(--text-muted);">of ${maxMemory} MB Allocated</small>
+                    <small class="text-muted">of ${maxMemory} MB Allocated</small>
                 </div>
 
             </div>
 
-            <div style="margin-top: 30px;">
+            <div class="mt-4">
                 <h3 style="margin-bottom: 15px; color: var(--primary-dark);">Platform Productivity</h3>
 
                 <div class="card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div class="d-flex flex-between align-end">
                         <div>
-                            <h4 style="margin: 0; color: var(--text-muted); font-weight: 600;">Global Completion Rate</h4>
+                            <h4 class="text-muted font-bold" style="margin: 0;">Global Completion Rate</h4>
                             <span style="font-size: 2.5rem; font-weight: 700; color: var(--primary-dark); font-family: var(--font-heading);">
                         ${completionRate}%
                     </span>
                         </div>
                         <div style="text-align: right;">
-                            <div style="font-size: 0.9rem; color: var(--text-muted);">Total Tasks</div>
+                            <div class="text-muted" style="font-size: 0.9rem;">Total Tasks</div>
                             <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary-dark);">${totalTasks}</div>
                         </div>
                     </div>

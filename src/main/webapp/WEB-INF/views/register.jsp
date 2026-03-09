@@ -17,7 +17,7 @@
     <body>
         <div class="login-wrapper">
 
-            <div class="brand-logo" style="display: flex; align-items: center; justify-content: center;">
+            <div class="brand-logo d-flex align-center flex-center">
                 <img src="${pageContext.request.contextPath}/assets/images/logo.png"
                      alt="TaskEE Logo"
                      style="height: 100px; width: auto;">
@@ -26,7 +26,7 @@
 
             <div class="card login-card">
 
-                <h2 style="text-align: center; margin-bottom: 1.5rem;">Create Account !</h2>
+                <h2 class="text-center mb-3">Create Account !</h2>
 
                 <c:if test="${not empty errorMessage}">
                     <div class="alert alert-error">
@@ -42,13 +42,13 @@
                                placeholder="Enter your Full Name" required autofocus>
                     </div>
 
-                    <div class="form-group" style="margin-top: 1rem">
+                    <div class="form-group mt-2">
                         <label for="email">Email Address</label>
                         <input type="email" id="email" name="email" maxlength="255" value="${email}"
                                placeholder="Enter your E-mail" required>
                     </div>
 
-                    <div class="form-group" style="margin-top: 1rem">
+                    <div class="form-group mt-2">
                         <label for="password">Password</label>
                         <input type="password" id="password" name="password"
                                placeholder="Enter a Strong Password"
@@ -63,7 +63,7 @@
                         </small>
                     </div>
 
-                    <div style="margin-top: 1.5rem;">
+                    <div class="mt-3">
                         <button type="submit" class="btn btn-primary" style="width: 100%;">
                             Sign Up
                         </button>
@@ -71,13 +71,13 @@
 
                 </form>
 
-                <div style="text-align: center; margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">
+                <div class="text-center mt-3 text-muted" style="font-size: 0.9rem;">
                     Already have an account?
-                    <a href="${pageContext.request.contextPath}/login" style="font-weight: 600;">Login</a>
+                    <a href="${pageContext.request.contextPath}/login" class="font-bold">Login</a>
                 </div>
             </div>
 
-            <div style="margin-top: 20px; color: var(--text-muted); font-size: 0.8rem;">
+            <div class="mt-3 text-muted" style="font-size: 0.8rem;">
                 &copy; 2026 TaskEE Project
             </div>
         </div>

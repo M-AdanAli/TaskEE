@@ -5,7 +5,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Admin | TaskEE</title>
+        <title>Admin Login | TaskEE</title>
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +25,7 @@
     </head>
     <body>
         <div class="login-wrapper">
-            <div class="brand-logo" style="display: flex; align-items: center; justify-content: center;">
+            <div class="brand-logo d-flex flex-center align-center">
                 <img src="${pageContext.request.contextPath}/assets/images/logo.png"
                      alt="TaskEE Logo"
                      style="height: 100px; width: auto;">
@@ -33,7 +33,7 @@
             </div>
 
             <div class="card login-card">
-                <h2 style="text-align: center; margin-bottom: 1.5rem; color: white;">System Access</h2>
+                <h2 class="text-center mb-3" style="color: white;">System Access</h2>
 
                 <c:if test="${not empty errorMessage}">
                     <div class="alert alert-error" style="background: #742a2a; border-color: #9b2c2c; color: #fc8181;">
@@ -46,7 +46,7 @@
                         <label>Administrator Email</label>
                         <input type="email" name="email" value="${param.email}" required autofocus>
                     </div>
-                    <div class="form-group" style="margin-top: 1rem">
+                    <div class="form-group mt-2">
                         <label>Password</label>
                         <input type="password" name="password" required>
                     </div>

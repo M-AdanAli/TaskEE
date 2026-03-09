@@ -3,7 +3,7 @@
     SessionUser currentUser = (SessionUser) session.getAttribute("currentUser");
 
     if (currentUser != null) {
-        response.sendRedirect(request.getContextPath() + "/tasks");
+        response.sendRedirect(request.getContextPath() + "/dashboard");
     } else {
         response.sendRedirect(request.getContextPath() + "/login");
     }

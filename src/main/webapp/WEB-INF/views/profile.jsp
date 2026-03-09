@@ -4,7 +4,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>My Tasks | TaskEE</title>
+        <title>My Profile | TaskEE</title>
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,12 +16,12 @@
 
         <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
-        <div class="container" style="max-width: 600px; margin-top: 40px;">
+        <div class="container mt-5" style="max-width: 600px;">
 
             <h2 style="color: var(--primary-dark); margin-bottom: 30px;">Account Settings</h2>
 
             <div class="card" style="margin-bottom: 3rem; border-top: 5px solid var(--brand-orange);">
-                <h3 style="margin-bottom: 1.5rem;">Profile Details</h3>
+                <h3 class="mt-3">Profile Details</h3>
 
                 <c:if test="${not empty successProfile}">
                     <div class="alert alert-success">${successProfile}</div>
@@ -35,17 +35,17 @@
                         <label>Email Address</label>
                         <input type="email" value="${sessionScope.currentUser.email()}" disabled
                                style="background-color: #f7fafc; color: var(--text-muted); cursor: not-allowed;">
-                        <small style="color: var(--text-muted);">Email cannot be changed.</small>
+                        <small class="text-muted">Email cannot be changed.</small>
                     </div>
-                    <div class="form-group" style="margin-top: 1rem">
+                    <div class="form-group mt-2">
                         <label>Full Name</label>
                         <input type="text" name="fullName" value="${sessionScope.currentUser.fullName()}" required maxlength="100">
                     </div>
-                    <button type="submit" class="btn btn-primary" style="margin-top: 1.5rem;">Update Profile</button>
+                    <button type="submit" class="btn btn-primary mt-3">Update Profile</button>
                 </form>
             </div>
             <div class="card" style="border-top: 5px solid var(--error-color);">
-                <h3 style="margin-bottom: 1.5rem;">Security</h3>
+                <h3 class="mt-3">Security</h3>
 
                 <c:if test="${not empty successPassword}">
                     <div class="alert alert-success">${successPassword}</div>
@@ -60,7 +60,7 @@
                         <input type="password" name="currentPassword" placeholder="Enter your Current Password" required>
                     </div>
 
-                    <div class="form-group" style="margin-top: 1rem">
+                    <div class="form-group mt-2">
                         <label>New Password</label>
                         <input type="password" id="newPassword" name="newPassword"
                                placeholder="Enter a New Password"
@@ -75,7 +75,7 @@
                         </small>
                     </div>
 
-                    <button type="submit" class="btn btn-secondary btn-danger" style="margin-top: 1.5rem;">Change Password</button>
+                    <button type="submit" class="btn btn-secondary btn-danger mt-3">Change Password</button>
                 </form>
             </div>
 

@@ -6,7 +6,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${pageTitle} - TaskEE</title>
+        <title>${pageTitle} | TaskEE</title>
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +36,7 @@
                 <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 2rem;">
 
                 <c:if test="${not empty errorMessage}">
-                    <div class="alert alert-error" style="margin-bottom: 20px;">
+                    <div class="alert alert-error mb-3">
                         <strong>Error:</strong> ${errorMessage}
                     </div>
                 </c:if>
@@ -48,17 +48,17 @@
                     </c:if>
                     <input type="hidden" name="source" value="${not empty param.source ? param.source : 'tasks'}">
                     <div class="form-group">
-                        <label style="margin-bottom: 8px;">Title</label>
+                        <label class="mb-1">Title</label>
                         <input type="text" name="title" placeholder="What needs to be done?" value="${task.title}" maxlength="150" required autofocus>
                     </div>
-                    <div class="form-group" style="margin-top: 1rem">
-                        <label style="margin-bottom: 8px;">Description</label>
+                    <div class="form-group mt-2">
+                        <label class="mb-1">Description</label>
                         <textarea name="description" rows="5"
                                   style="width: 100%; padding: 14px; border: 2px solid var(--border-color); border-radius: 6px; font-family: var(--font-body); font-size: 1rem; resize: none;"
                                   maxlength="5000">${task.description}</textarea>
                     </div>
-                    <div class="form-group" style="margin-top: 1.5rem;">
-                        <label style="margin-bottom: 8px;">Status</label>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Status</label>
                         <div class="status-selector">
                             <input type="radio" id="status-pending" name="status" value="PENDING"
                             ${(task.taskStatus == 'PENDING') || (empty task) ? 'checked' : ''}>
@@ -74,7 +74,7 @@
                         </div>
                     </div>
 
-                    <div style="margin-top: 3rem; padding-bottom: 2rem; display: flex;">
+                    <div class="mt-5 pb-2 d-flex">
                         <button type="submit" class="btn btn-primary" style="padding: 12px 24px; font-size: 1rem;">
                             ${not empty task ? 'Save Changes' : 'Create Task'}
                         </button>
@@ -85,17 +85,15 @@
                 </form>
 
                 <c:if test="${not empty task}">
-                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 2rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="form-meta">
                         <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
-                            <div style="display: flex; align-items: center; gap: 5px;">
-                                <!-- Icon (optional) or label -->
-                                <span style="font-weight: 600;">Created:</span>
+                            <div class="d-flex align-center gap-1">
+                                <span class="font-bold">Created:</span>
                                 <t:timeAgo date="${task.createdAt}" />
                             </div>
                             <c:if test="${not empty task.updatedAt}">
-                                <div style="display: flex; align-items: center; gap: 5px;">
-                                    <span style="font-weight: 600;">Updated:</span>
+                                <div class="d-flex align-center gap-1">
+                                    <span class="font-bold">Updated:</span>
                                     <t:timeAgo date="${task.updatedAt}" />
                                 </div>
                             </c:if>
