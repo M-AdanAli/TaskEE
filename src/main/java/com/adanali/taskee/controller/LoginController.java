@@ -7,12 +7,9 @@ import com.adanali.taskee.service.UserService;
 import com.adanali.taskee.service.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class LoginController implements Controller{
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     private final UserService userService;
 
     public LoginController(){
@@ -41,18 +38,13 @@ public class LoginController implements Controller{
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        logger.info("Login attempt for email: {}",email);
-
         try {
             User user = userService.login(email,password);
             SessionUser sessionUser = new SessionUser(user.getId(), user.getEmail(), user.getFullName());
 
             request.getSession().setAttribute("currentUser", sessionUser);
-
-            logger.info("User {} logged in successfully.", user.getEmail());
             return "redirect:/dashboard";
         }catch (AuthenticationException e){
-            logger.warn("Login attempt failed for {}: {}",email, e.getMessage());
             request.setAttribute("errorMessage","Invalid email or password.");
             request.setAttribute("email",email);
 

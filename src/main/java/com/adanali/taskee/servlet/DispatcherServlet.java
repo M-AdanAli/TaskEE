@@ -10,6 +10,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -38,6 +40,7 @@ import java.util.Map;
 public class DispatcherServlet extends HttpServlet {
 
     private final Map<String, Controller> controllers = new HashMap<>();
+    private static final Logger LOGGER = LoggerFactory.getLogger(DispatcherServlet.class);
 
     @Override
     public void init(){
@@ -69,6 +72,7 @@ public class DispatcherServlet extends HttpServlet {
 
         Controller controller = controllers.get(path);
         if (controller == null){
+            LOGGER.warn("Resource Not Found at {}", path);
             response.sendError(404,"Resource not found: "+path);
             return;
         }
@@ -85,12 +89,16 @@ public class DispatcherServlet extends HttpServlet {
                 request.getRequestDispatcher(jspPath).forward(request, response);
             }
         }catch (UserNotFoundException | TaskNotFoundException e) {
-            response.sendError(404, e.getMessage());
+            LOGGER.warn("Resource Not Found at {}: {}", path, e.getMessage());
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         } catch (AuthorizationException e) {
-            response.sendError(403, e.getMessage());
+            LOGGER.warn("SECURITY: Unauthorized access to {} | {}", path, e.getMessage());
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         } catch (ServiceException e) {
-            response.sendError(500, "Internal System Error: " + e.getMessage());
+            LOGGER.error("System Error during request to {}: {}", path, e.getMessage(), e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal System Error");
         } catch (Exception e) {
+            LOGGER.error("Unexpected Application Crash on {}: {}", path, e.getMessage(), e);
             throw new ServletException("Unexpected Error", e);
         }
     }

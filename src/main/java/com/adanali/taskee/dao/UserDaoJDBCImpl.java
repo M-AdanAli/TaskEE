@@ -67,6 +67,7 @@ public class UserDaoJDBCImpl implements UserDAO{
         return Optional.empty();
     }
 
+    // TODO: Have to rethink the existence of this method
     @Override
     public List<User> findAll() throws SQLException{
         List<User> users = new ArrayList<>();
@@ -96,6 +97,7 @@ public class UserDaoJDBCImpl implements UserDAO{
         }
     }
 
+    // TODO: Have to rethink the existence of this method
     @Override
     public void deleteById(Long id) throws SQLException{
         try (Connection connection = DBConnectionManager.getConnection();

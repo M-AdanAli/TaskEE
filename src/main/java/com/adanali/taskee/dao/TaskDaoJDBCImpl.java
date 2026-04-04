@@ -109,6 +109,7 @@ public class TaskDaoJDBCImpl implements TaskDAO{
         }
     }
 
+    // TODO: Change this method to count by UserId based on TaskStatus
     @Override
     public int countByUserId(Long userId) throws SQLException{
         try (Connection connection = DBConnectionManager.getConnection();

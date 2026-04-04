@@ -41,7 +41,7 @@ public class AdminController implements Controller{
         if (user != null && ADMIN_EMAIL.equalsIgnoreCase(user.email())) {
             return loadDashboard(request);
         } else if (user != null && !ADMIN_EMAIL.equalsIgnoreCase(user.email())) {
-            throw new AuthorizationException("Access Denied: You do not have administrator privileges.");
+            throw new AuthorizationException();
         } else {
             return "admin-login";
         }
