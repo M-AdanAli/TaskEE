@@ -2,8 +2,7 @@ package com.adanali.taskee.service;
 
 import com.adanali.taskee.domain.Task;
 import com.adanali.taskee.domain.enums.TaskStatus;
-
-import java.util.List;
+import com.adanali.taskee.dto.Page;
 
 public interface TaskService {
 
@@ -15,11 +14,13 @@ public interface TaskService {
 
     void delete(Long taskId, Long userId);
 
-    List<Task> getAll(Long userId);
-
     Task getById(Long taskId, Long userId);
 
-    List<Task> getTasksByStatus(Long userId, TaskStatus status);
+    Page<Task> getAll(Long userId, int page, int size);
+
+    Page<Task> getTasksByStatus(Long userId, TaskStatus status, int page, int size);
+
+    long getTaskCountByStatus(Long userId, TaskStatus status);
 
     long countGlobalAllTasks();
 

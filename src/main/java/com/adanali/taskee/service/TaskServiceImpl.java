@@ -4,6 +4,7 @@ import com.adanali.taskee.dao.TaskDAO;
 import com.adanali.taskee.dao.TaskDaoJDBCImpl;
 import com.adanali.taskee.domain.Task;
 import com.adanali.taskee.domain.enums.TaskStatus;
+import com.adanali.taskee.dto.Page;
 import com.adanali.taskee.exception.AuthorizationException;
 import com.adanali.taskee.exception.ServiceException;
 import com.adanali.taskee.exception.TaskNotFoundException;
@@ -105,13 +106,20 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public List<Task> getAll(Long userId) {
+    public Page<Task> getAll(Long userId, int page, int size) {
         LOGGER.info("Attempting to FETCH All tasks for User#{} ...",userId);
 
         try {
-            List<Task> tasks = taskDAO.findAllByUserId(userId);
+            long totalTasks = taskDAO.countByUserId(userId);
+            long totalPages = (int) Math.ceil((double) totalTasks / size);
+            if (totalPages == 0) totalPages = 1;
+            if (page < 1 || page > totalPages) page = 1;
+
+            int offset = (page - 1) * size;
+            List<Task> tasks = taskDAO.findAllByUserId(userId, size, offset);
             LOGGER.info("Successfully FETCHED All Tasks for User#{} !",userId);
-            return tasks;
+
+            return new Page<>(tasks, page, totalPages, totalTasks );
         } catch (SQLException e) {
             throw new ServiceException("DATABASE ERROR: While FETCHING All Tasks for User#%s: %s".formatted(userId, e.getMessage()), e);
         }
@@ -138,15 +146,33 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public List<Task> getTasksByStatus(Long userId, TaskStatus status) {
+    public Page<Task> getTasksByStatus(Long userId, TaskStatus status, int page, int size) {
         LOGGER.info("Attempting to FETCH '{}' Tasks for User#{} ...",status.name(),userId);
 
         try {
-            List<Task> tasks = taskDAO.findAllByUserIdAndStatus(userId, status);
+            long totalTasks = taskDAO.countByUserIdAndStatus(userId,status);
+            long totalPages = (int) Math.ceil((double) totalTasks / size);
+            if (totalPages == 0) totalPages = 1;
+            if (page < 1 || page > totalPages) page = 1;
+
+            int offset = (page - 1) * size;
+            List<Task> tasks = taskDAO.findAllByUserIdAndStatus(userId, status, size, offset);
             LOGGER.info("Successfully FETCHED '{}' Tasks for User#{} !",status.name(),userId);
-            return tasks;
+
+            return new Page<>(tasks, page, totalPages, totalTasks);
         } catch (SQLException e) {
             throw new ServiceException("DATABASE ERROR: While FETCHING '%s' Tasks for User#%s: %s".formatted(status.name(),userId, e.getMessage()), e);
+        }
+    }
+
+    @Override
+    public long getTaskCountByStatus(Long userId, TaskStatus status){
+        LOGGER.info("Attempting to FETCH '{}' Tasks Count for User#{} ...",status.name(),userId);
+
+        try {
+            return taskDAO.countByUserIdAndStatus(userId, status);
+        }catch (SQLException e){
+            throw new ServiceException("DATABASE ERROR: While FETCHING '%s' Tasks Count for User#%s: %s".formatted(status.name(),userId, e.getMessage()), e);
         }
     }
 

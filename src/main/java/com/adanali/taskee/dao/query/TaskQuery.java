@@ -9,11 +9,13 @@ public enum TaskQuery {
 
     FIND_BY_ID("SELECT * FROM tasks WHERE id = ?"),
 
-    FIND_ALL_BY_USER("SELECT * FROM tasks WHERE user_id = ? ORDER BY created_at DESC"),
+    FIND_ALL_BY_USER("SELECT * FROM tasks WHERE user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?"),
 
-    FIND_BY_USER_AND_STATUS("SELECT * FROM tasks WHERE user_id = ? AND status = ? ORDER BY created_at DESC"),
+    FIND_BY_USER_AND_STATUS("SELECT * FROM tasks WHERE user_id = ? AND status = ? ORDER BY created_at DESC LIMIT ? OFFSET ?"),
 
     COUNT_BY_USER("SELECT COUNT(*) FROM tasks WHERE user_id = ?"),
+
+    COUNT_BY_USER_AND_STATUS("SELECT COUNT(*) FROM tasks WHERE user_id = ? AND status = ?"),
 
     COUNT_ALL_GLOBALLY("SELECT COUNT(*) FROM tasks"),
 

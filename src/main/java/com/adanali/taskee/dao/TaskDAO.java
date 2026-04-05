@@ -15,9 +15,9 @@ public interface TaskDAO {
     // READ
     Optional<Task> findById(Long id) throws SQLException;
 
-    List<Task> findAllByUserId(Long userId) throws SQLException;
+    List<Task> findAllByUserId(Long userId, int limit, int offset) throws SQLException;
 
-    List<Task> findAllByUserIdAndStatus(Long userId, TaskStatus status) throws SQLException;
+    List<Task> findAllByUserIdAndStatus(Long userId, TaskStatus status, int limit, int offset) throws SQLException;
 
     // UPDATE
     void update(Task task) throws SQLException;
@@ -26,7 +26,9 @@ public interface TaskDAO {
     void deleteById(Long id) throws SQLException;
 
     // Utility Method: For Dashboard Stats
-    int countByUserId(Long userId) throws SQLException;
+    long countByUserId(Long userId) throws SQLException;
+
+    long countByUserIdAndStatus(Long userId, TaskStatus status) throws SQLException;
 
     long countAllGlobalTasks() throws SQLException;
 

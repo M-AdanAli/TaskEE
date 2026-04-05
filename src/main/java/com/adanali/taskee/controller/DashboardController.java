@@ -20,25 +20,26 @@ public class DashboardController implements Controller{
     public DashboardController() {
         this.taskService = new TaskServiceImpl();
     }
+
     @Override
     public String handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         SessionUser user = (SessionUser) request.getSession().getAttribute("currentUser");
 
         logger.info("Dashboard Metrics fetching attempt for email: {}", user.email());
-        List<Task> allTasks = taskService.getAll(user.id());
 
-        long pendingCount = allTasks.stream().filter(t -> t.getTaskStatus() == TaskStatus.PENDING).count();
-        long progressCount = allTasks.stream().filter(t -> t.getTaskStatus() == TaskStatus.IN_PROGRESS).count();
-        long completedCount = allTasks.stream().filter(t -> t.getTaskStatus() == TaskStatus.COMPLETED).count();
+        long pendingCount = taskService.getTaskCountByStatus(user.id(), TaskStatus.PENDING);
+        long progressCount = taskService.getTaskCountByStatus(user.id(), TaskStatus.IN_PROGRESS);
+        long completedCount = taskService.getTaskCountByStatus(user.id(), TaskStatus.COMPLETED);
+        long totalTasks = pendingCount + progressCount + completedCount;
 
-        request.setAttribute("totalTasks", allTasks.size());
+        request.setAttribute("totalTasks", totalTasks);
         request.setAttribute("pendingCount", pendingCount);
         request.setAttribute("progressCount", progressCount);
         request.setAttribute("completedCount", completedCount);
         request.setAttribute("userName", user.fullName());
 
-        List<Task> recentTasks = (allTasks.size() > 5 ) ? allTasks.subList(0, 5) : allTasks;
+        List<Task> recentTasks = taskService.getAll(user.id(), 1, 5).items();
         request.setAttribute("recentTasks", recentTasks);
 
         return "dashboard";

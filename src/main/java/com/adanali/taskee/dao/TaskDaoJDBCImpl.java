@@ -85,38 +85,59 @@ public class TaskDaoJDBCImpl implements TaskDAO{
     }
 
     @Override
-    public List<Task> findAllByUserId(Long userId) throws SQLException{
+    public List<Task> findAllByUserId(Long userId, int limit, int offset) throws SQLException{
         try (Connection connection = DBConnectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.FIND_ALL_BY_USER.getQuery())) {
 
-            // SELECT * FROM tasks WHERE user_id = ? ORDER BY created_at DESC
+            // SELECT * FROM tasks WHERE user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
             preparedStatement.setLong(1, userId);
+            preparedStatement.setInt(2, limit);
+            preparedStatement.setInt(3, offset);
 
             return executeQuery(preparedStatement);
         }
     }
 
     @Override
-    public List<Task> findAllByUserIdAndStatus(Long userId, TaskStatus status) throws SQLException{
+    public List<Task> findAllByUserIdAndStatus(Long userId, TaskStatus status, int limit, int offset) throws SQLException{
         try (Connection connection = DBConnectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.FIND_BY_USER_AND_STATUS.getQuery())) {
 
-            // SELECT * FROM tasks WHERE user_id = ? AND status = ? ORDER BY created_at DESC
+            // SELECT * FROM tasks WHERE user_id = ? AND status = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
             preparedStatement.setLong(1, userId);
             preparedStatement.setString(2, status.name());
+            preparedStatement.setInt(3, limit);
+            preparedStatement.setInt(4, offset);
 
             return executeQuery(preparedStatement);
         }
     }
 
-    // TODO: Change this method to count by UserId based on TaskStatus
     @Override
-    public int countByUserId(Long userId) throws SQLException{
+    public long countByUserId(Long userId) throws SQLException{
         try (Connection connection = DBConnectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.COUNT_BY_USER.getQuery())) {
 
             // SELECT COUNT(*) FROM tasks WHERE user_id = ?
             preparedStatement.setLong(1, userId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()){
+                    return resultSet.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public long countByUserIdAndStatus(Long userId, TaskStatus status) throws SQLException{
+        try (Connection connection = DBConnectionManager.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.COUNT_BY_USER_AND_STATUS.getQuery())){
+
+            // SELECT COUNT(*) FROM tasks WHERE user_id = ? AND status = ?
+            preparedStatement.setLong(1, userId);
+            preparedStatement.setString(2, status.name());
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()){

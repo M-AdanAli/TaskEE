@@ -45,7 +45,7 @@
                 </a>
             </div>
             <div class="task-grid">
-                <c:forEach var="task" items="${taskList}" varStatus="status">
+                <c:forEach var="task" items="${taskPage.items}" varStatus="status">
                     <div class="task-card">
                         <div class="card-header">
                         <span class="badge badge-${task.taskStatus.name().toLowerCase()}">
@@ -55,7 +55,7 @@
                             </c:choose>
                         </span>
                             <span class="mono-text text-muted" style="font-size: 0.85rem;">
-                            #ID-${status.count}
+                            #ID-${offset + status.count}
                             </span>
                         </div>
                         <h3 class="card-title">
@@ -124,7 +124,7 @@
                 </c:forEach>
             </div>
 
-            <c:if test="${empty taskList}">
+            <c:if test="${empty taskPage.items}">
                 <div style="text-align: center; padding: 8rem; background: white; border: 1px solid var(--border-color);border-radius: var(--radius-md); box-shadow: var(--shadow-subtle); font-size: 0.95rem;">
                     <c:choose>
                         <c:when test="${not empty activeFilter && activeFilter != 'ALL'}">
@@ -137,6 +137,66 @@
                         </c:otherwise>
                     </c:choose>
                 </div>
+            </c:if>
+
+            <c:if test="${taskPage.totalPages > 1}">
+
+                <!-- 1. Build the Base URL preserving the filter -->
+                <c:set var="baseUrl" value="${pageContext.request.contextPath}/tasks?" />
+                <c:if test="${activeFilter != 'ALL'}">
+                    <c:set var="baseUrl" value="${baseUrl}status=${activeFilter}&" />
+                </c:if>
+
+                <c:set var="startPage" value="${taskPage.currentPage - 2}" />
+                <c:if test="${startPage < 1}">
+                    <c:set var="startPage" value="1" />
+                </c:if>
+
+                <c:set var="endPage" value="${startPage + 4}" />
+                <c:if test="${endPage > taskPage.totalPages}">
+                    <c:set var="endPage" value="${taskPage.totalPages}" />
+                    <c:set var="startPage" value="${endPage - 4}" />
+                    <c:if test="${startPage < 1}">
+                        <c:set var="startPage" value="1" />
+                    </c:if>
+                </c:if>
+
+                <div class="pagination">
+
+                    <!-- Previous Button -->
+                    <a href="${baseUrl}page=${taskPage.currentPage - 1}"
+                       class="page-btn ${!taskPage.hasPrevious() ? 'disabled' : ''}">
+                        &laquo;
+                    </a>
+
+                    <!-- First Page Indicator (If window moved past page 1) -->
+                    <c:if test="${startPage > 1}">
+                        <a href="${baseUrl}page=1" class="page-btn">1</a>
+                        <span class="page-info">...</span>
+                    </c:if>
+
+                    <!-- Page Numbers (The Window) -->
+                    <c:forEach begin="${startPage}" end="${endPage}" var="i">
+                        <a href="${baseUrl}page=${i}"
+                           class="page-btn ${taskPage.currentPage == i ? 'active' : ''}">
+                                ${i}
+                        </a>
+                    </c:forEach>
+
+                    <!-- Last Page Indicator (If window is before last page) -->
+                    <c:if test="${endPage < taskPage.totalPages}">
+                        <span class="page-info">...</span>
+                        <a href="${baseUrl}page=${taskPage.totalPages}" class="page-btn">${taskPage.totalPages}</a>
+                    </c:if>
+
+                    <!-- Next Button -->
+                    <a href="${baseUrl}page=${taskPage.currentPage + 1}"
+                       class="page-btn ${!taskPage.hasNext() ? 'disabled' : ''}">
+                        &raquo;
+                    </a>
+
+                </div>
+
             </c:if>
 
         </div>

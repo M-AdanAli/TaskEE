@@ -546,3 +546,55 @@ input:focus {
 .text-main { color: var(--text-main)}
 .font-bold { font-weight: 600; }
 .no-decoration { text-decoration: none; color: inherit; }
+
+/* --- PAGINATION --- */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background-color: white;
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.page-btn:hover:not(.disabled) {
+    background-color: #F7FAFC;
+    border-color: #CBD5E0;
+    color: var(--primary-dark);
+}
+
+.page-btn.active {
+    background-color: var(--primary-dark);
+    color: white;
+    border-color: var(--primary-dark);
+}
+
+.page-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.page-info {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0 15px;
+}

@@ -69,7 +69,7 @@ public class TaskDAOTest {
         Assertions.assertDoesNotThrow(()->{
             taskDAO.save(new Task( "Task 1", "Desc 1",testUser.getId()));
             taskDAO.save(new Task( "Task 2", "Desc 2", testUser.getId()));
-            List<Task> tasks = taskDAO.findAllByUserId(testUser.getId());
+            List<Task> tasks = taskDAO.findAllByUserId(testUser.getId(),10,0);
             Assertions.assertEquals(2, tasks.size());
         });
     }
@@ -98,7 +98,7 @@ public class TaskDAOTest {
             taskDAO.save(new Task( "Task A", "Desc", testUser.getId()));
             taskDAO.save(new Task("Task B", "Desc", testUser.getId()));
 
-            int count = taskDAO.countByUserId(testUser.getId());
+            long count = taskDAO.countByUserId(testUser.getId());
             Assertions.assertEquals(2, count);
         });
     }
