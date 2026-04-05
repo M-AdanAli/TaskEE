@@ -19,12 +19,11 @@
     if (seconds < 0) {
         if (seconds > -300) {
             out.print("Just now");
-            return;
         }
         else {
             out.print(date.format(DateTimeFormatter.ofPattern("MMM dd, yyyy")));
-            return;
         }
+        return;
     }
     if (seconds < 60) {
         out.print("Just now");

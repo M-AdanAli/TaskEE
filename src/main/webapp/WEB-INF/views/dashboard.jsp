@@ -20,7 +20,7 @@
         <div class="container">
 
             <div class="text-center mt-4 mb-6">
-                <h1 style="font-size: 2.5rem;">Welcome back, <span class="hero-name">${userName}</span>!</h1>
+                <h1 style="font-size: 2.5rem;">Welcome back, <span class="hero-name"><c:out value='${userName}'/></span>!</h1>
                 <p class="text-muted" style="font-size: 1.3rem; letter-spacing: -0.02em;">
                     Here's your productivity overview...
                 </p>
@@ -71,7 +71,7 @@
                             </td>
                             <td class="font-bold">
                                 <a href="${pageContext.request.contextPath}/tasks/edit?id=${task.id}&vId=${status.count}&source=dashboard" class="table-title-wrapper no-decoration text-main">
-                                    <span class="text-truncate">${task.title}</span>
+                                    <span class="text-truncate"><c:out value='${task.title}' /></span>
                                     <span class="edit-icon">✐</span>
                                 </a>
                             </td>

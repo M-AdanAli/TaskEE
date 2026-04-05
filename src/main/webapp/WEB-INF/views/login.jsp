@@ -43,7 +43,7 @@
 
                     <div class="form-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" value="${email}"
+                        <input type="email" id="email" name="email" value="<c:out value='${email}' />"
                                placeholder="Enter your E-mail" required autofocus>
                     </div>
 

@@ -67,13 +67,11 @@ public class User{
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("User{");
-        sb.append("id=").append(id);
-        sb.append(", email='").append(email).append('\'');
-        sb.append(", password='").append(password).append('\'');
-        sb.append(", fullName='").append(fullName).append('\'');
-        sb.append(", created_at=").append(created_at);
-        sb.append('}');
-        return sb.toString();
+        return "User{" + "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", created_at=" + created_at +
+                '}';
     }
 }

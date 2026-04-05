@@ -49,13 +49,13 @@
                     <input type="hidden" name="source" value="${not empty param.source ? param.source : 'tasks'}">
                     <div class="form-group">
                         <label class="mb-1">Title</label>
-                        <input type="text" name="title" placeholder="What needs to be done?" value="${task.title}" maxlength="150" required autofocus>
+                        <input type="text" name="title" placeholder="What needs to be done?" value="<c:out value='${task.title}' />" maxlength="150" required autofocus>
                     </div>
                     <div class="form-group mt-2">
                         <label class="mb-1">Description</label>
                         <textarea name="description" rows="5"
                                   style="width: 100%; padding: 14px; border: 2px solid var(--border-color); border-radius: 6px; font-family: var(--font-body); font-size: 1rem; resize: none;"
-                                  maxlength="5000">${task.description}</textarea>
+                                  maxlength="5000"><c:out value='${task.description}' /></textarea>
                     </div>
                     <div class="form-group mb-3">
                         <label class="mb-1">Status</label>

@@ -79,7 +79,7 @@ public class TaskController implements Controller{
         taskService.createTask(task);
 
         String source = request.getParameter("source");
-        if (source.equalsIgnoreCase("dashboard")) {
+        if (source != null && source.equalsIgnoreCase("dashboard")) {
             return "redirect:/dashboard";
         } else {
             return "redirect:/tasks";
@@ -120,7 +120,7 @@ public class TaskController implements Controller{
         taskService.updateTask(task);
 
         String source = request.getParameter("source");
-        if (source.equalsIgnoreCase("dashboard")) {
+        if (source != null && source.equalsIgnoreCase("dashboard")) {
             return "redirect:/dashboard";
         } else {
             return "redirect:/tasks";

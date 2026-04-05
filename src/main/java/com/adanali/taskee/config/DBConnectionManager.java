@@ -40,7 +40,6 @@ public class DBConnectionManager {
 
             dataSource = new HikariDataSource(dbConfig);
         }catch (Exception e){
-            e.printStackTrace();
             throw new RuntimeException("Error initializing HikariCP", e);
         }
     }

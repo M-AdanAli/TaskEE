@@ -33,13 +33,13 @@
                 <form action="${pageContext.request.contextPath}/profile/update" method="post">
                     <div class="form-group">
                         <label>Email Address</label>
-                        <input type="email" value="${sessionScope.currentUser.email()}" disabled
+                        <input type="email" value="<c:out value='${sessionScope.currentUser.email()}' />" disabled
                                style="background-color: #f7fafc; color: var(--text-muted); cursor: not-allowed;">
                         <small class="text-muted">Email cannot be changed.</small>
                     </div>
                     <div class="form-group mt-2">
                         <label>Full Name</label>
-                        <input type="text" name="fullName" value="${sessionScope.currentUser.fullName()}" required maxlength="100">
+                        <input type="text" name="fullName" value="<c:out value='${sessionScope.currentUser.fullName()}' />" required maxlength="100">
                     </div>
                     <button type="submit" class="btn btn-primary mt-3">Update Profile</button>
                 </form>

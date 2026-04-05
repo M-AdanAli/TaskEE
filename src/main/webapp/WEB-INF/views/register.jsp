@@ -38,13 +38,13 @@
 
                     <div class="form-group">
                         <label for="fullName">Full Name</label>
-                        <input type="text" id="fullName" name="fullName" maxlength="100" value="${fullName}"
+                        <input type="text" id="fullName" name="fullName" maxlength="100" value="<c:out value='${fullName}' />"
                                placeholder="Enter your Full Name" required autofocus>
                     </div>
 
                     <div class="form-group mt-2">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" maxlength="255" value="${email}"
+                        <input type="email" id="email" name="email" maxlength="255" value="<c:out value='${email}' />"
                                placeholder="Enter your E-mail" required>
                     </div>
 

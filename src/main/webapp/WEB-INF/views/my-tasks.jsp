@@ -60,14 +60,14 @@
                         </div>
                         <h3 class="card-title">
                             <a href="${pageContext.request.contextPath}/tasks/edit?id=${task.id}&vId=${status.count}" class="no-decoration">
-                                    ${task.title}
+                                    <c:out value='${task.title}' />
                             </a>
                         </h3>
                         <div class="card-body">
                             <c:choose>
                                 <c:when test="${not empty task.description}">
                                     <div style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                                            ${task.description}
+                                        <c:out value='${task.description}' />
                                     </div>
                                 </c:when>
                                 <c:otherwise>

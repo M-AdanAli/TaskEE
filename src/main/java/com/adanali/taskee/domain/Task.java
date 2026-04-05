@@ -90,15 +90,13 @@ public class Task {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Task{");
-        sb.append("id=").append(id);
-        sb.append(", title='").append(title).append('\'');
-        sb.append(", description='").append(description).append('\'');
-        sb.append(", TaskStatus=").append(taskStatus);
-        sb.append(", userId=").append(userId);
-        sb.append(", createdAt=").append(createdAt);
-        sb.append(", updatedAt=").append(updatedAt);
-        sb.append('}');
-        return sb.toString();
+        return "Task{" + "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", TaskStatus=" + taskStatus +
+                ", userId=" + userId +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

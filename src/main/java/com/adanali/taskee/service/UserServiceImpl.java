@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService{
             if (BCrypt.checkpw(password,user.getPassword())){
                 LOGGER.info("Successfully logged in the User with E-mail: {} !", email);
                 return user;
-            }else throw new AuthenticationException("Invalid Password (%s)".formatted(password));
+            }else throw new AuthenticationException("Invalid Password.");
         }catch (SQLException e){
             throw new ServiceException("DATABASE ERROR: While authenticating User with E-mail %s: %s".formatted(email, e.getMessage()), e);
         }

@@ -44,7 +44,7 @@
                 <form action="${pageContext.request.contextPath}/admin" method="post">
                     <div class="form-group">
                         <label>Administrator Email</label>
-                        <input type="email" name="email" value="${param.email}" required autofocus>
+                        <input type="email" name="email" value="<c:out value='${param.email}' />" required autofocus>
                     </div>
                     <div class="form-group mt-2">
                         <label>Password</label>
