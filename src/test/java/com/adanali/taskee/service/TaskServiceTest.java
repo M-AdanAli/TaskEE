@@ -1,5 +1,6 @@
 package com.adanali.taskee.service;
 
+import com.adanali.taskee.config.DBConnectionManager;
 import com.adanali.taskee.dao.TaskDaoJDBCImpl;
 import com.adanali.taskee.dao.UserDAO;
 import com.adanali.taskee.dao.UserDaoJDBCImpl;
@@ -7,10 +8,7 @@ import com.adanali.taskee.domain.Task;
 import com.adanali.taskee.domain.User;
 import com.adanali.taskee.domain.enums.TaskStatus;
 import com.adanali.taskee.exception.AuthorizationException;
-import com.adanali.taskee.exception.ServiceException;
 import org.junit.jupiter.api.*;
-
-import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,11 +19,15 @@ class TaskServiceTest {
     private static UserService userService;
     private static UserDAO userDAO;
 
+    private static final String OWNER_EMAIL = "owner_" + System.currentTimeMillis() + "@test.com";
+    private static final String HACKER_EMAIL = "hacker_" + System.currentTimeMillis() + "@test.com";
+
     private User userOwner;
     private User userHacker;
 
     @BeforeAll
     static void setup() {
+        DBConnectionManager.init();
         userDAO = new UserDaoJDBCImpl();
         userService = new UserServiceImpl(userDAO);
         taskService = new TaskServiceImpl(new TaskDaoJDBCImpl());
@@ -33,20 +35,26 @@ class TaskServiceTest {
 
     @BeforeEach
     void initData() {
-        cleanUser("owner@test.com");
-        cleanUser("hacker@test.com");
+        cleanUser(OWNER_EMAIL);
+        cleanUser(HACKER_EMAIL);
 
-        userOwner = userService.register(new User("owner@test.com", "pass", "Owner"));
-        userHacker = userService.register(new User("hacker@test.com", "pass", "Hacker"));
+        userOwner = userService.register(new User(OWNER_EMAIL, "pass", "Owner"));
+        userHacker = userService.register(new User(HACKER_EMAIL, "pass", "Hacker"));
     }
 
-    private void cleanUser(String email) {
+    @AfterAll
+    static void tearDown() {
+        cleanUser(OWNER_EMAIL);
+        cleanUser(HACKER_EMAIL);
+    }
+
+    private static void cleanUser(String email) {
         try {
             if (userDAO.exists(email)) {
                 userDAO.deleteById(userDAO.findByEmail(email).get().getId());
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to clean up");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -63,14 +71,11 @@ class TaskServiceTest {
     @Test
     @Order(2)
     void testUpdateTask_Owner_Success() {
-        // 1. Create task as Owner
         Task task = taskService.createTask(new Task("Original", "Desc", userOwner.getId()));
 
-        // 2. Prepare update
         task.setTitle("Updated Title");
         taskService.updateTask(task);
 
-        // 3. Verify
         Task updated = taskService.getById(task.getId(), userOwner.getId());
         assertEquals("Updated Title", updated.getTitle());
     }
@@ -78,22 +83,18 @@ class TaskServiceTest {
     @Test
     @Order(3)
     void testUpdateTask_Hacker_AccessDenied() {
-        // 1. Owner creates a task
         Task task = taskService.createTask(new Task("Secret Data", "Desc", userOwner.getId()));
 
-        // 2. Hacker tries to update Owner's task
-        // We simulate this by creating a task object with the Owner's Task ID but Hacker's User ID
         Task hackAttempt = new Task();
         hackAttempt.setId(task.getId());
-        hackAttempt.setUserId(userHacker.getId()); // <--- The Hacker's Session ID
+        hackAttempt.setUserId(userHacker.getId()); // Hacker's ID
         hackAttempt.setTitle("HACKED");
         hackAttempt.setTaskStatus(TaskStatus.COMPLETED);
 
-        // 3. Expect AuthorizationException (Access Denied)
-        ServiceException ex = assertThrows(AuthorizationException.class, () -> {
+        AuthorizationException ex = assertThrows(AuthorizationException.class, () -> {
             taskService.updateTask(hackAttempt);
         });
 
-        assertTrue(ex.getMessage().contains("Access Denied") || ex.getMessage().contains("not own"));
+        assertTrue(ex.getMessage().contains("Access Denied") || ex.getMessage().contains("authorized"));
     }
 }

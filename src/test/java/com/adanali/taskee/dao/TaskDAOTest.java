@@ -17,23 +17,22 @@ public class TaskDAOTest {
     private static TaskDAO taskDAO;
     private static UserDAO userDAO;
     private static User testUser;
+    private static final String TEST_EMAIL = "task_tester_" + System.currentTimeMillis() + "@example.com";
 
     @BeforeAll
     static void setup() {
+        DBConnectionManager.init();
         taskDAO = new TaskDaoJDBCImpl();
         userDAO = new UserDaoJDBCImpl();
 
-        // Parent User that owns the tasks
         Assertions.assertDoesNotThrow(()->{
-            User user = new User("task_tester@example.com", "password", "Task Tester");
+            User user = new User(TEST_EMAIL, "password", "Task Tester");
             testUser = userDAO.save(user);
         });
-
     }
 
     @AfterAll
     static void tearDown() {
-        // Cleanup: Delete the user (Cascade should delete tasks too)
         Assertions.assertDoesNotThrow(()->{
             if (testUser != null && testUser.getId() != null) {
                 userDAO.deleteById(testUser.getId());
@@ -41,7 +40,6 @@ public class TaskDAOTest {
         });
     }
 
-    // Optional: Clean tasks between tests if needed
     @BeforeEach
     void cleanTasks() {
         try (Connection conn = DBConnectionManager.getConnection();
@@ -57,7 +55,7 @@ public class TaskDAOTest {
             Task task = new Task( "Learn JUnit", "Study TDD", testUser.getId());
             Task savedTask = taskDAO.save(task);
             Assertions.assertNotNull(savedTask.getId());
-            Assertions.assertNotNull(savedTask.getCreatedAt(), "Timestamp should be populated by the DB refresh");
+            Assertions.assertNotNull(savedTask.getCreatedAt());
             Assertions.assertEquals("Learn JUnit", savedTask.getTitle());
         });
     }
@@ -65,7 +63,6 @@ public class TaskDAOTest {
     @Test
     @Order(2)
     void testFindAllByUserId() {
-        // Adding more tasks
         Assertions.assertDoesNotThrow(()->{
             taskDAO.save(new Task( "Task 1", "Desc 1",testUser.getId()));
             taskDAO.save(new Task( "Task 2", "Desc 2", testUser.getId()));
