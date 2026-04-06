@@ -61,7 +61,14 @@ public class AdminController implements Controller{
 
             HttpSession session = request.getSession();
             SessionUser sessionUser = new SessionUser(user.getId(), user.getEmail(), user.getFullName());
-            session.setAttribute("currentUser", sessionUser);
+
+            HttpSession oldSession = request.getSession(false);
+            if (oldSession != null) {
+                oldSession.invalidate();
+            }
+
+            HttpSession newSession = request.getSession(true);
+            newSession.setAttribute("currentUser", sessionUser);
 
             return "redirect:/admin";
         }catch (AuthenticationException e){

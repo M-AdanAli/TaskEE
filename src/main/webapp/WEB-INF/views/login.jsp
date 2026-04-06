@@ -35,7 +35,7 @@
                 </c:if>
                 <c:if test="${not empty errorMessage}">
                     <div class="alert alert-error">
-                        <strong>Error:</strong> ${errorMessage}
+                        <strong>Error:</strong> <c:out value="${errorMessage}" />
                     </div>
                 </c:if>
 

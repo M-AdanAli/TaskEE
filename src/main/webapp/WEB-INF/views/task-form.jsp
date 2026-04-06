@@ -46,7 +46,7 @@
                     <c:if test="${not empty task}">
                         <input type="hidden" name="id" value="${task.id}">
                     </c:if>
-                    <input type="hidden" name="source" value="${not empty param.source ? param.source : 'tasks'}">
+                    <input type="hidden" name="source" value="<c:out value='${not empty param.source ? param.source : \"tasks\"}'/>">
                     <div class="form-group">
                         <label class="mb-1">Title</label>
                         <input type="text" name="title" placeholder="What needs to be done?" value="<c:out value='${task.title}' />" maxlength="150" required autofocus>
@@ -78,7 +78,7 @@
                         <button type="submit" class="btn btn-primary" style="padding: 12px 24px; font-size: 1rem;">
                             ${not empty task ? 'Save Changes' : 'Create Task'}
                         </button>
-                        <a href="${pageContext.request.contextPath}/${not empty param.source && param.source == 'tasks'? 'tasks' : 'dashboard'}" class="btn btn-secondary" style="margin-left: 10px; padding: 12px 24px; font-size: 1rem;">
+                        <a href="${pageContext.request.contextPath}/<c:out value='${not empty param.source ? param.source : \"dashboard\"}'/>" class="btn btn-secondary" style="margin-left: 10px; padding: 12px 24px; font-size: 1rem;">
                             Cancel
                         </a>
                     </div>
@@ -100,7 +100,7 @@
                         </div>
                         <form action="${pageContext.request.contextPath}/tasks/delete" method="post">
                             <input type="hidden" name="id" value="${task.id}">
-                            <input type="hidden" name="source" value="${not empty param.source ? param.source : 'tasks'}">
+                            <input type="hidden" name="source" value="<c:out value='${not empty param.source ? param.source : \"tasks\"}'/>">
                             <button type="submit" class="btn btn-danger"
                                     style="font-size: 1rem; padding: 12px 24px"
                                     onclick="return confirm('Permanently delete this task?');">

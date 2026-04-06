@@ -8,6 +8,7 @@ import com.adanali.taskee.service.UserServiceImpl;
 import com.adanali.taskee.util.ValidationUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,13 @@ public class RegistrationController implements Controller{
             User registeredUser = userService.register(newUser);
             SessionUser sessionUser = new SessionUser(registeredUser.getId(), registeredUser.getEmail(), registeredUser.getFullName());
 
-            request.getSession().setAttribute("currentUser", sessionUser);
+            HttpSession oldSession = request.getSession(false);
+            if (oldSession != null) {
+                oldSession.invalidate();
+            }
+
+            HttpSession newSession = request.getSession(true);
+            newSession.setAttribute("currentUser", sessionUser);
 
             logger.info("User registered and logged in: {}", email);
             return "redirect:/dashboard";

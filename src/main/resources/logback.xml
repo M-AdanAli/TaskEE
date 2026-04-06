@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Define the log directory -->
+    <property name="LOG_DIR" value="${catalina.base}/logs/taskee" />
+
+    <!-- 1. Console Output (For your IDE) -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- %highlight adds color. %d is date. %thread is web request thread -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %highlight(%-5level) [%thread] %cyan(%logger{36}) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 2. File Output (For Production Storage) -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/taskee.log</file>
+
+        <append>true</append>
+
+        <!-- Daily Log Rotation Policy -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Name of the archived zip files -->
+            <fileNamePattern>${LOG_DIR}/archived/taskee-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!-- Keep 30 days of history -->
+            <maxHistory>30</maxHistory>
+            <!-- Maximum size of all logs combined -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 3. Logging Levels -->
+    <!-- Set our specific application code to INFO -->
+    <logger name="com.adanali.taskee" level="INFO" />
+
+    <!-- Silence the noisy HikariCP startup logs unless it's a warning -->
+    <logger name="com.zaxxer.hikari" level="WARN" />
+
+    <!-- Root logger applies to everything else -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>

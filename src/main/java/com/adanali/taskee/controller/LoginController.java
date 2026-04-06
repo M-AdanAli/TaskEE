@@ -7,6 +7,7 @@ import com.adanali.taskee.service.UserService;
 import com.adanali.taskee.service.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 public class LoginController implements Controller{
 
@@ -42,7 +43,14 @@ public class LoginController implements Controller{
             User user = userService.login(email,password);
             SessionUser sessionUser = new SessionUser(user.getId(), user.getEmail(), user.getFullName());
 
-            request.getSession().setAttribute("currentUser", sessionUser);
+            HttpSession oldSession = request.getSession(false);
+            if (oldSession != null) {
+                oldSession.invalidate();
+            }
+
+            HttpSession newSession = request.getSession(true);
+            newSession.setAttribute("currentUser", sessionUser);
+
             return "redirect:/dashboard";
         }catch (AuthenticationException e){
             request.setAttribute("errorMessage","Invalid email or password.");
