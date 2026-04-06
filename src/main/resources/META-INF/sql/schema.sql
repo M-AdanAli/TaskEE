@@ -29,3 +29,18 @@ CREATE TABLE tasks (
 -- We will frequently search for tasks belonging to a specific user.
 -- Without an index, the DB has to scan the whole table.
 CREATE INDEX idx_tasks_user ON tasks(user_id);
+
+-- 5. Seed the reserved admin account expected by AdminController
+-- email:    admin@taskee.com
+-- password: Admin@123
+--
+-- Note: this BCrypt hash was prepared externally. If your local jBCrypt
+-- setup rejects the prefix variant, regenerate the hash with jBCrypt
+-- and keep the same INSERT.
+INSERT INTO users (email, password, full_name)
+VALUES (
+           'admin@taskee.com',
+           '$2y$10$3g.6q3PEqaWrzDbViJrAfeh794V.M19/..6hifxctKiJ3I0Ud08G.',
+           'System Administrator'
+       )
+    ON DUPLICATE KEY UPDATE email = email;
