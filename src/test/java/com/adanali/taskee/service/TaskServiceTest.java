@@ -61,17 +61,17 @@ class TaskServiceTest {
     @Test
     @Order(1)
     void testCreateTask_Success() {
-        Task task = new Task("My Task", "Desc", userOwner.getId());
+        Task task = new Task("My Task", "Desc", userOwner.getId(), userOwner.getId());
         Task created = taskService.createTask(task);
 
         assertNotNull(created.getId());
-        assertEquals(userOwner.getId(), created.getUserId());
+        assertEquals(userOwner.getId(), created.getOwnerId());
     }
 
     @Test
     @Order(2)
     void testUpdateTask_Owner_Success() {
-        Task task = taskService.createTask(new Task("Original", "Desc", userOwner.getId()));
+        Task task = taskService.createTask(new Task("Original", "Desc", userOwner.getId(), userOwner.getId()));
 
         task.setTitle("Updated Title");
         taskService.updateTask(task);
@@ -83,11 +83,11 @@ class TaskServiceTest {
     @Test
     @Order(3)
     void testUpdateTask_Hacker_AccessDenied() {
-        Task task = taskService.createTask(new Task("Secret Data", "Desc", userOwner.getId()));
+        Task task = taskService.createTask(new Task("Secret Data", "Desc", userOwner.getId(), userOwner.getId()));
 
         Task hackAttempt = new Task();
         hackAttempt.setId(task.getId());
-        hackAttempt.setUserId(userHacker.getId()); // Hacker's ID
+        hackAttempt.setOwnerId(userHacker.getId()); // Hacker's ID
         hackAttempt.setTitle("HACKED");
         hackAttempt.setTaskStatus(TaskStatus.COMPLETED);
 

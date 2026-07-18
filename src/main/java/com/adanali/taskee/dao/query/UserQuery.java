@@ -9,7 +9,7 @@ public enum UserQuery {
 
     FIND_ALL("SELECT * FROM users"),
 
-    UPDATE("UPDATE users SET full_name = ?, password = ? WHERE id = ?"),
+    UPDATE("UPDATE users SET full_name = ?, password = ?, is_active = ? WHERE id = ?"),
 
     DELETE("DELETE FROM users WHERE id = ?"),
 

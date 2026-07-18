@@ -12,6 +12,11 @@
     <div class="nav-links">
         <a href="${pageContext.request.contextPath}/dashboard" class="${activePage == 'dashboard' ? 'active' : ''}">Dashboard</a>
         <a href="${pageContext.request.contextPath}/tasks" class="${activePage == 'tasks' ? 'active' : ''}">My Tasks</a>
+        <c:if test="${sessionScope.currentUser.role().name() == 'ADMIN'}">
+            <a href="${pageContext.request.contextPath}/admin" class="${activePage == 'admin' ? 'active' : ''}">
+                Admin Console
+            </a>
+        </c:if>
         <a href="${pageContext.request.contextPath}/profile" class="${activePage == 'profile' ? 'active' : ''}">Profile</a>
         <a href="${pageContext.request.contextPath}/logout" class="btn btn-sm btn-secondary" style="border: none; color: var(--text-main)">Logout</a>
     </div>

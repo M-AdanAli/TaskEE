@@ -1,5 +1,7 @@
 package com.adanali.taskee.domain;
 
+import com.adanali.taskee.domain.enums.Role;
+
 import java.time.LocalDateTime;
 
 public class User{
@@ -8,19 +10,25 @@ public class User{
     private String password;
     private String fullName;
     private LocalDateTime created_at;
+    private Role role;
+    private boolean isActive;
 
-    public User(Long id, String email, String password, String fullName, LocalDateTime created_at) {
+    public User(Long id, String email, String password, String fullName, LocalDateTime created_at, Role role, boolean isActive) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.fullName = fullName;
         this.created_at = created_at;
+        this.role = role;
+        this.isActive = isActive;
     }
 
     public User(String email, String password, String fullName) {
         this.email = email;
         this.password = password;
         this.fullName = fullName;
+        this.role = Role.MEMBER;
+        this.isActive = true;
     }
 
     public User(){}
@@ -65,6 +73,22 @@ public class User{
         this.created_at = created_at;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     @Override
     public String toString() {
         return "User{" + "id=" + id +
@@ -72,6 +96,8 @@ public class User{
                 ", password='" + password + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", created_at=" + created_at +
+                ", role=" + role +
+                ", isActive" + isActive +
                 '}';
     }
 }

@@ -41,7 +41,7 @@ public class LoginController implements Controller{
 
         try {
             User user = userService.login(email,password);
-            SessionUser sessionUser = new SessionUser(user.getId(), user.getEmail(), user.getFullName());
+            SessionUser sessionUser = new SessionUser(user.getId(), user.getEmail(), user.getFullName(), user.getRole(), user.isActive());
 
             HttpSession oldSession = request.getSession(false);
             if (oldSession != null) {

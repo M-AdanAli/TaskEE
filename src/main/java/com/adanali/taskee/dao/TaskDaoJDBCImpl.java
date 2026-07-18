@@ -17,11 +17,16 @@ public class TaskDaoJDBCImpl implements TaskDAO{
         try (Connection connection = DBConnectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.INSERT.getQuery(), Statement.RETURN_GENERATED_KEYS)) {
 
-            // INSERT INTO tasks (user_id, title, description, status) VALUES (?, ?, ?, ?)
-            preparedStatement.setLong(1, task.getUserId());
-            preparedStatement.setString(2, task.getTitle());
-            preparedStatement.setString(3, task.getDescription());
-            preparedStatement.setString(4, task.getTaskStatus().name());
+            // INSERT INTO tasks (owner_id, assignee_id, title, description, status) VALUES (?, ?, ?, ?, ?)
+            preparedStatement.setLong(1, task.getOwnerId());
+            if (task.getAssigneeId() != null) {
+                preparedStatement.setLong(2, task.getAssigneeId());
+            } else {
+                preparedStatement.setNull(2, java.sql.Types.BIGINT);
+            }
+            preparedStatement.setString(3, task.getTitle());
+            preparedStatement.setString(4, task.getDescription());
+            preparedStatement.setString(5, task.getTaskStatus().name());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) throw new SQLException("Failed to Create the Task, No rows affected.");
@@ -43,11 +48,16 @@ public class TaskDaoJDBCImpl implements TaskDAO{
         try (Connection connection = DBConnectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.UPDATE.getQuery())) {
 
-            // UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?
+            // UPDATE tasks SET title = ?, description = ?, status = ?, assignee_id=? WHERE id = ?
             preparedStatement.setString(1, task.getTitle());
             preparedStatement.setString(2, task.getDescription());
             preparedStatement.setString(3, task.getTaskStatus().name());
-            preparedStatement.setLong(4, task.getId());
+            if (task.getAssigneeId() != null) {
+                preparedStatement.setLong(4, task.getAssigneeId());
+            } else {
+                preparedStatement.setNull(4, java.sql.Types.BIGINT);
+            }
+            preparedStatement.setLong(5, task.getId());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) throw new SQLException("Failed to Update the Task, No rows affected.");
@@ -85,12 +95,12 @@ public class TaskDaoJDBCImpl implements TaskDAO{
     }
 
     @Override
-    public List<Task> findAllByUserId(Long userId, int limit, int offset) throws SQLException{
+    public List<Task> findAllByAssigneeId(Long assigneeId, int limit, int offset) throws SQLException{
         try (Connection connection = DBConnectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.FIND_ALL_BY_USER.getQuery())) {
+             PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.FIND_ALL_BY_ASSIGNEE.getQuery())) {
 
-            // SELECT * FROM tasks WHERE user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
-            preparedStatement.setLong(1, userId);
+            // SELECT * FROM tasks WHERE assignee_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+            preparedStatement.setLong(1, assigneeId);
             preparedStatement.setInt(2, limit);
             preparedStatement.setInt(3, offset);
 
@@ -99,12 +109,12 @@ public class TaskDaoJDBCImpl implements TaskDAO{
     }
 
     @Override
-    public List<Task> findAllByUserIdAndStatus(Long userId, TaskStatus status, int limit, int offset) throws SQLException{
+    public List<Task> findAllByAssigneeIdAndStatus(Long assigneeId, TaskStatus status, int limit, int offset) throws SQLException{
         try (Connection connection = DBConnectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.FIND_BY_USER_AND_STATUS.getQuery())) {
+             PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.FIND_BY_ASSIGNEE_AND_STATUS.getQuery())) {
 
-            // SELECT * FROM tasks WHERE user_id = ? AND status = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
-            preparedStatement.setLong(1, userId);
+            // SELECT * FROM tasks WHERE assignee_id = ? AND status = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+            preparedStatement.setLong(1, assigneeId);
             preparedStatement.setString(2, status.name());
             preparedStatement.setInt(3, limit);
             preparedStatement.setInt(4, offset);
@@ -114,12 +124,44 @@ public class TaskDaoJDBCImpl implements TaskDAO{
     }
 
     @Override
-    public long countByUserId(Long userId) throws SQLException{
+    public List<Task> findDelegatedByOwner(long ownerId, int limit, int offset) throws SQLException {
         try (Connection connection = DBConnectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.COUNT_BY_USER.getQuery())) {
+             PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.FIND_DELEGATED_BY_OWNER.getQuery())) {
 
-            // SELECT COUNT(*) FROM tasks WHERE user_id = ?
-            preparedStatement.setLong(1, userId);
+            // SELECT * FROM tasks WHERE owner_id = ? AND (assignee_id != ? OR assignee_id IS NULL) ORDER BY created_at DESC LIMIT ? OFFSET ?
+            preparedStatement.setLong(1, ownerId);
+            preparedStatement.setLong(2, ownerId);
+            preparedStatement.setInt(3, limit);
+            preparedStatement.setInt(4, offset);
+
+            return executeQuery(preparedStatement);
+        }
+    }
+
+    @Override
+    public List<Task> findDelegatedByOwnerAndStatus(long ownerId, TaskStatus status, int limit, int offset) throws SQLException {
+        try (Connection connection = DBConnectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.FIND_DELEGATED_BY_OWNER_AND_STATUS.getQuery())) {
+
+            // SELECT * FROM tasks WHERE owner_id = ? AND (assignee_id != ? OR assignee_id IS NULL) AND status = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+            preparedStatement.setLong(1, ownerId);
+            preparedStatement.setLong(2, ownerId);
+            preparedStatement.setString(3, status.name());
+            preparedStatement.setInt(4, limit);
+            preparedStatement.setInt(5, offset);
+
+            return executeQuery(preparedStatement);
+        }
+    }
+
+
+    @Override
+    public long countByAssigneeId(Long assigneeId) throws SQLException{
+        try (Connection connection = DBConnectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.COUNT_BY_ASSIGNEE.getQuery())) {
+
+            // SELECT COUNT(*) FROM tasks WHERE assignee_id = ?
+            preparedStatement.setLong(1, assigneeId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()){
@@ -131,13 +173,50 @@ public class TaskDaoJDBCImpl implements TaskDAO{
     }
 
     @Override
-    public long countByUserIdAndStatus(Long userId, TaskStatus status) throws SQLException{
+    public long countByAssigneeIdAndStatus(Long assigneeId, TaskStatus status) throws SQLException{
         try (Connection connection = DBConnectionManager.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.COUNT_BY_USER_AND_STATUS.getQuery())){
+        PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.COUNT_BY_ASSIGNEE_AND_STATUS.getQuery())){
 
-            // SELECT COUNT(*) FROM tasks WHERE user_id = ? AND status = ?
-            preparedStatement.setLong(1, userId);
+            // SELECT COUNT(*) FROM tasks WHERE assignee_id = ? AND status = ?
+            preparedStatement.setLong(1, assigneeId);
             preparedStatement.setString(2, status.name());
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()){
+                    return resultSet.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public long countDelegatedByOwner(long ownerId) throws SQLException {
+        try (Connection connection = DBConnectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.COUNT_DELEGATED_BY_OWNER.getQuery())) {
+
+            // SELECT COUNT(*) FROM tasks WHERE owner_id = ? AND (assignee_id != ? OR assignee_id IS NULL)
+            preparedStatement.setLong(1, ownerId);
+            preparedStatement.setLong(2, ownerId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()){
+                    return resultSet.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public long countDelegatedByOwnerAndStatus(long ownerId, TaskStatus status) throws SQLException {
+        try (Connection connection = DBConnectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(TaskQuery.COUNT_DELEGATED_BY_OWNER_AND_STATUS.getQuery())){
+
+            // SELECT COUNT(*) FROM tasks WHERE owner_id = ? AND (assignee_id != ? OR assignee_id IS NULL) AND status = ?
+            preparedStatement.setLong(1, ownerId);
+            preparedStatement.setLong(2, ownerId);
+            preparedStatement.setString(3, status.name());
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()){
@@ -189,9 +268,12 @@ public class TaskDaoJDBCImpl implements TaskDAO{
     }
 
     private Task mapResultSetToTask(ResultSet resultSet) throws SQLException {
+        long assigneeId = resultSet.getLong("assignee_id");
+        Long finalAssigneeId = resultSet.wasNull() ? null : assigneeId;
         return new Task(
                 resultSet.getLong("id"),
-                resultSet.getLong("user_id"),
+                resultSet.getLong("owner_id"),
+                finalAssigneeId,
                 resultSet.getString("title"),
                 resultSet.getString("description"),
                 TaskStatus.valueOf(resultSet.getString("status")),

@@ -60,7 +60,7 @@ public class RegistrationController implements Controller{
         try {
             User newUser = new User(email, password, fullName);
             User registeredUser = userService.register(newUser);
-            SessionUser sessionUser = new SessionUser(registeredUser.getId(), registeredUser.getEmail(), registeredUser.getFullName());
+            SessionUser sessionUser = new SessionUser(registeredUser.getId(), registeredUser.getEmail(), registeredUser.getFullName(), registeredUser.getRole(), registeredUser.isActive());
 
             HttpSession oldSession = request.getSession(false);
             if (oldSession != null) {

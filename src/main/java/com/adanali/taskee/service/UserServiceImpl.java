@@ -60,8 +60,10 @@ public class UserServiceImpl implements UserService{
 
             User user = optionalUser.get();
             if (BCrypt.checkpw(password,user.getPassword())){
-                LOGGER.info("Successfully logged in the User with E-mail: {} !", email);
-                return user;
+                if (user.isActive()){
+                    LOGGER.info("Successfully logged in the User with E-mail: {} !", email);
+                    return user;
+                }else throw new AuthenticationException("Your account has been deactivated by the Admin.");
             }else throw new AuthenticationException("Invalid Password.");
         }catch (SQLException e){
             throw new ServiceException("DATABASE ERROR: While authenticating User with E-mail %s: %s".formatted(email, e.getMessage()), e);

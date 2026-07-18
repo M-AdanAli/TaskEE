@@ -1,13 +1,10 @@
 package com.adanali.taskee.controller;
 
-import com.adanali.taskee.domain.User;
+import com.adanali.taskee.domain.enums.Role;
 import com.adanali.taskee.dto.SessionUser;
-import com.adanali.taskee.exception.AuthenticationException;
 import com.adanali.taskee.exception.AuthorizationException;
 import com.adanali.taskee.service.TaskService;
 import com.adanali.taskee.service.TaskServiceImpl;
-import com.adanali.taskee.service.UserService;
-import com.adanali.taskee.service.UserServiceImpl;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,60 +17,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AdminController implements Controller{
 
     private final TaskService taskService;
-    private final UserService userService;
-    private static final String ADMIN_EMAIL = "admin@taskee.com";
 
     public AdminController() {
         this.taskService = new TaskServiceImpl();
-        this.userService = new UserServiceImpl();
     }
 
     @Override
     public String handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        if (request.getMethod().equalsIgnoreCase("POST")) {
-            return handleLogin(request);
-        }
-
         HttpSession session = request.getSession(false);
         SessionUser user = (session != null) ? (SessionUser) session.getAttribute("currentUser") : null;
 
-        if (user != null && ADMIN_EMAIL.equalsIgnoreCase(user.email())) {
+        if (user != null && user.role().equals(Role.ADMIN)) {
             return loadDashboard(request);
-        } else if (user != null && !ADMIN_EMAIL.equalsIgnoreCase(user.email())) {
-            throw new AuthorizationException();
         } else {
-            return "admin-login";
-        }
-    }
-
-    private String handleLogin(HttpServletRequest request){
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
-        if (!ADMIN_EMAIL.equalsIgnoreCase(email)) {
-            request.setAttribute("errorMessage", "Access Denied.");
-            return "admin-login";
-        }
-
-        try {
-            User user = userService.login(email,password);
-
-            HttpSession session = request.getSession();
-            SessionUser sessionUser = new SessionUser(user.getId(), user.getEmail(), user.getFullName());
-
-            HttpSession oldSession = request.getSession(false);
-            if (oldSession != null) {
-                oldSession.invalidate();
-            }
-
-            HttpSession newSession = request.getSession(true);
-            newSession.setAttribute("currentUser", sessionUser);
-
-            return "redirect:/admin";
-        }catch (AuthenticationException e){
-            request.setAttribute("errorMessage", "Invalid Credentials.");
-            return "admin-login";
+            throw new AuthorizationException();
         }
     }
 

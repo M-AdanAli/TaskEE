@@ -6,16 +6,18 @@ import java.time.LocalDateTime;
 
 public class Task {
     private Long id;
-    private Long userId;
+    private Long ownerId;
+    private Long assigneeId;
     private String title;
     private String description;
     private TaskStatus taskStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Task(Long id, Long userId, String title, String description, TaskStatus taskStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Task(Long id, Long ownerId, Long assigneeId, String title, String description, TaskStatus taskStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.userId = userId;
+        this.ownerId = ownerId;
+        this.assigneeId = assigneeId;
         this.title = title;
         this.description = description;
         this.taskStatus = taskStatus;
@@ -23,11 +25,12 @@ public class Task {
         this.updatedAt = updatedAt;
     }
 
-    public Task(String title, String description, Long userId) {
+    public Task(String title, String description, Long ownerId, Long assigneeId) {
         this.title = title;
         this.description = description;
         taskStatus = TaskStatus.PENDING;
-        this.userId = userId;
+        this.ownerId = ownerId;
+        this.assigneeId = assigneeId;
     }
 
     public Task(){}
@@ -64,12 +67,20 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getOwnerId() {
+        return ownerId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public Long getAssigneeId() {
+        return assigneeId;
+    }
+
+    public void setAssigneeId(Long assigneeId) {
+        this.assigneeId = assigneeId;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -94,7 +105,8 @@ public class Task {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", TaskStatus=" + taskStatus +
-                ", userId=" + userId +
+                ", ownerId=" + ownerId +
+                ". assigneeId=" + assigneeId +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';

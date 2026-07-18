@@ -41,12 +41,12 @@ public class TaskController implements Controller{
         return "task-form";
     }
 
-    private String showEditForm(HttpServletRequest request, Long userId) {
+    private String showEditForm(HttpServletRequest request, Long ownerId) {
         String idParam = request.getParameter("id");
         if (idParam == null) return "redirect:/tasks";
 
         Long taskId = Long.parseLong(idParam);
-        Task task = taskService.getById(taskId, userId);
+        Task task = taskService.getById(taskId, ownerId);
 
         request.setAttribute("task", task);
         request.setAttribute("pageTitle", "Edit Task");
@@ -68,7 +68,7 @@ public class TaskController implements Controller{
             return showFormWithError(request, "Description is too long (max 5000 characters).", title, description, null);
         }
 
-        Task task = new Task(title, description, userId);
+        Task task = new Task(title, description, userId, userId);
 
         if (statusString != null && (statusString.equalsIgnoreCase("PENDING") ||
                                      statusString.equalsIgnoreCase("IN_PROGRESS"))
@@ -104,7 +104,8 @@ public class TaskController implements Controller{
 
         Task task = new Task();
         task.setId(id);
-        task.setUserId(userId);
+        task.setOwnerId(userId);
+        task.setAssigneeId(userId);
         task.setTitle(title);
         task.setDescription(description);
 
@@ -127,7 +128,7 @@ public class TaskController implements Controller{
         }
     }
 
-    private String updateStatus(HttpServletRequest request, Long userId) {
+    private String updateStatus(HttpServletRequest request, Long ownerId) {
         if (!request.getMethod().equalsIgnoreCase("POST")) return "redirect:/tasks";
 
         try {
@@ -135,7 +136,7 @@ public class TaskController implements Controller{
             String statusString = request.getParameter("status");
             TaskStatus newStatus = TaskStatus.valueOf(statusString);
 
-            taskService.updateTaskStatus(id, userId, newStatus);
+            taskService.updateTaskStatus(id, ownerId, newStatus);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -144,11 +145,11 @@ public class TaskController implements Controller{
         return "redirect:" + (referer != null && referer.contains("dashboard") ? "/dashboard" : "/tasks");
     }
 
-    private String deleteTask(HttpServletRequest request, Long userId) {
+    private String deleteTask(HttpServletRequest request, Long ownerId) {
         if (!request.getMethod().equalsIgnoreCase("POST")) return "redirect:/tasks";
 
         Long id = Long.parseLong(request.getParameter("id"));
-        taskService.delete(id, userId);
+        taskService.delete(id, ownerId);
 
         String source = request.getParameter("source");
         if (source.equalsIgnoreCase("dashboard")) {

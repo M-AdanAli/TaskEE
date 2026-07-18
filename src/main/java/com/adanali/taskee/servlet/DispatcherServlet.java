@@ -115,6 +115,9 @@ public class DispatcherServlet extends HttpServlet {
             case "profile":
                 request.setAttribute("activePage", "profile");
                 break;
+            case "admin":
+                request.setAttribute("activePage", "admin");
+                break;
             default:
                 break;
         }

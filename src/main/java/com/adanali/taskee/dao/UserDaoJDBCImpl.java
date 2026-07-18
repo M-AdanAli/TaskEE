@@ -3,6 +3,7 @@ package com.adanali.taskee.dao;
 import com.adanali.taskee.config.DBConnectionManager;
 import com.adanali.taskee.dao.query.UserQuery;
 import com.adanali.taskee.domain.User;
+import com.adanali.taskee.domain.enums.Role;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -87,10 +88,11 @@ public class UserDaoJDBCImpl implements UserDAO{
         try (Connection connection = DBConnectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UserQuery.UPDATE.getQuery())) {
 
-            // UPDATE users SET full_name = ?, password = ? WHERE id = ?
+            // UPDATE users SET full_name = ?, password = ?, is_active = ? WHERE id = ?
             preparedStatement.setString(1, user.getFullName());
             preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setLong(3, user.getId());
+            preparedStatement.setBoolean(3, user.isActive());
+            preparedStatement.setLong(4, user.getId());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) throw new SQLException("Failed to Update the User, No rows affected.");
@@ -130,7 +132,9 @@ public class UserDaoJDBCImpl implements UserDAO{
                 resultSet.getString("email"),
                 resultSet.getString("password"),
                 resultSet.getString("full_name"),
-                resultSet.getTimestamp("created_at").toLocalDateTime()
+                resultSet.getTimestamp("created_at").toLocalDateTime(),
+                Role.valueOf(resultSet.getString("role")),
+                resultSet.getBoolean("is_active")
         );
     }
 }
