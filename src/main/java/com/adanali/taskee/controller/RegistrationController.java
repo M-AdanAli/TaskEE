@@ -5,6 +5,7 @@ import com.adanali.taskee.dto.SessionUser;
 import com.adanali.taskee.exception.UserAlreadyExistsException;
 import com.adanali.taskee.service.UserService;
 import com.adanali.taskee.service.UserServiceImpl;
+import com.adanali.taskee.util.SessionRegistry;
 import com.adanali.taskee.util.ValidationUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -60,7 +61,7 @@ public class RegistrationController implements Controller{
         try {
             User newUser = new User(email, password, fullName);
             User registeredUser = userService.register(newUser);
-            SessionUser sessionUser = new SessionUser(registeredUser.getId(), registeredUser.getEmail(), registeredUser.getFullName(), registeredUser.getRole(), registeredUser.isActive());
+            SessionUser sessionUser = new SessionUser(registeredUser.getId(), registeredUser.getEmail(), registeredUser.getFullName(), registeredUser.getRole());
 
             HttpSession oldSession = request.getSession(false);
             if (oldSession != null) {
@@ -69,6 +70,7 @@ public class RegistrationController implements Controller{
 
             HttpSession newSession = request.getSession(true);
             newSession.setAttribute("currentUser", sessionUser);
+            SessionRegistry.addSession(sessionUser.id(), newSession);
 
             logger.info("User registered and logged in: {}", email);
             return "redirect:/dashboard";

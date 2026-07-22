@@ -7,13 +7,17 @@ public enum UserQuery {
 
     FIND_BY_EMAIL("SELECT * FROM users WHERE email = ?"),
 
-    FIND_ALL("SELECT * FROM users"),
+    FIND_ALL("SELECT * FROM users ORDER BY created_at ASC LIMIT ? OFFSET ?"),
 
     UPDATE("UPDATE users SET full_name = ?, password = ?, is_active = ? WHERE id = ?"),
 
+    UPDATE_STATUS("UPDATE users SET is_active = ? WHERE id = ?"),
+
     DELETE("DELETE FROM users WHERE id = ?"),
 
-    EXISTS("SELECT 1 FROM users WHERE email = ?");
+    EXISTS("SELECT 1 FROM users WHERE email = ?"),
+
+    COUNT_ALL("SELECT COUNT(*) FROM users");
 
     private final String query;
 

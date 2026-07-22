@@ -9,16 +9,16 @@ public class User{
     private String email;
     private String password;
     private String fullName;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     private Role role;
     private boolean isActive;
 
-    public User(Long id, String email, String password, String fullName, LocalDateTime created_at, Role role, boolean isActive) {
+    public User(Long id, String email, String password, String fullName, LocalDateTime createdAt, Role role, boolean isActive) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.fullName = fullName;
-        this.created_at = created_at;
+        this.createdAt = createdAt;
         this.role = role;
         this.isActive = isActive;
     }
@@ -65,12 +65,12 @@ public class User{
         this.fullName = fullName;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Role getRole() {
@@ -95,7 +95,7 @@ public class User{
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", fullName='" + fullName + '\'' +
-                ", created_at=" + created_at +
+                ", createdAt=" + createdAt +
                 ", role=" + role +
                 ", isActive" + isActive +
                 '}';

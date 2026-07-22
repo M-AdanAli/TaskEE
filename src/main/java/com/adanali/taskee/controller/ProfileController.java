@@ -60,7 +60,7 @@ public class ProfileController implements Controller{
 
         userService.updateProfile(userToUpdate);
 
-        SessionUser updatedSessionUser = new SessionUser(currentUser.id(), currentUser.email(), fullName, currentUser.role(), currentUser.isActive());
+        SessionUser updatedSessionUser = new SessionUser(currentUser.id(), currentUser.email(), fullName, currentUser.role());
         request.getSession().setAttribute("currentUser", updatedSessionUser);
 
         logger.warn("Full Name updated successfully for {}", currentUser.email());

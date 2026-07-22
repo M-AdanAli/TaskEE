@@ -13,14 +13,18 @@ public interface UserDAO {
     // READ
     Optional<User> findById(Long id) throws SQLException ;
     Optional<User> findByEmail(String email) throws SQLException ;
-    List<User> findAll() throws SQLException ;
+    List<User> findAll(int limit, int offset) throws SQLException ;
 
     // Update
     void update(User user) throws SQLException ;
+
+    void updateStatus(Long userId, boolean isActive) throws SQLException;
 
     // Delete
     void deleteById(Long id) throws SQLException ;
 
     // Utility Method
     boolean exists(String email) throws SQLException ;
+
+    long countAllUsers() throws SQLException;
 }

@@ -34,7 +34,9 @@ import java.util.Map;
                 "/tasks/update",
                 "/tasks/status",
                 "/tasks/delete",
-                "/admin"
+                "/admin",
+                "/admin/users",
+                "/admin/users/status"
         }
 )
 public class DispatcherServlet extends HttpServlet {
@@ -63,7 +65,10 @@ public class DispatcherServlet extends HttpServlet {
         controllers.put("/profile/update", profileController);
         controllers.put("/profile/password", profileController);
 
-        controllers.put("/admin", new AdminController());
+        AdminController adminController = new AdminController();
+        controllers.put("/admin", adminController);
+        controllers.put("/admin/users", adminController);
+        controllers.put("/admin/users/status", adminController);
     }
 
     @Override
@@ -115,7 +120,7 @@ public class DispatcherServlet extends HttpServlet {
             case "profile":
                 request.setAttribute("activePage", "profile");
                 break;
-            case "admin":
+            case "admin", "admin-users":
                 request.setAttribute("activePage", "admin");
                 break;
             default:

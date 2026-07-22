@@ -10,7 +10,7 @@ CREATE TABLE users (
                        full_name VARCHAR(100) NOT NULL,
                        role ENUM('ADMIN', 'MEMBER') DEFAULT 'MEMBER',
                        is_active BOOLEAN DEFAULT TRUE,
-                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 3. Create Tasks Table
@@ -21,7 +21,7 @@ CREATE TABLE tasks (
                        title VARCHAR(150) NOT NULL,
                        description TEXT,
                        status VARCHAR(20) DEFAULT 'PENDING',
-                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
                        FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE,

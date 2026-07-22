@@ -1,10 +1,13 @@
 package com.adanali.taskee.listener;
 
 import com.adanali.taskee.config.DBConnectionManager;
+import com.adanali.taskee.dto.SessionUser;
+import com.adanali.taskee.util.SessionRegistry;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;
 import org.slf4j.Logger;
@@ -54,6 +57,16 @@ public class AppEventListener implements ServletContextListener, HttpSessionList
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
+        HttpSession session = se.getSession();
+        try {
+            SessionUser sessionUser = (SessionUser) session.getAttribute("currentUser");
+            if (sessionUser != null) {
+                SessionRegistry.removeSession(sessionUser.id(), session.getId());
+            }
+        } catch (IllegalStateException e) {
+            // Session was already fully invalidated, attributes are gone. Safe to ignore.
+        }
+
         int currentCount = activeSessions.decrementAndGet();
 
         logger.info("Session Destroyed: {}. Total Active Sessions: {}", se.getSession().getId(), currentCount);

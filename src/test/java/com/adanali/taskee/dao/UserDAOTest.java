@@ -80,7 +80,7 @@ public class UserDAOTest {
             testId2 = savedUser.getId();
         });
         Assertions.assertDoesNotThrow(()-> {
-            List<User> users = userDAO.findAll();
+            List<User> users = userDAO.findAll(9999,0);
             // FIX: Index-agnostic search (Works safely on databases with 1 or 1,000,000 existing users)
             boolean userFound = users.stream().anyMatch(u -> u.getEmail().equals(TEST_EMAIL_2));
             Assertions.assertTrue(userFound, "Newly created user should exist in the findAll list.");

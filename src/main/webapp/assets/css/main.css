@@ -190,6 +190,7 @@ input:focus {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    border: 1px solid;
 }
 
 .badge-pending {
@@ -208,6 +209,12 @@ input:focus {
     background-color: #F0FFF4;
     color: #38A169;
     border-color: #9AE6B4;
+}
+
+.badge-inactive {
+    background-color: #FFF5F5;
+    color: #C53030;
+    border-color: #FEB2B2;
 }
 
 .status-selector {
@@ -544,6 +551,7 @@ input:focus {
 .text-center { text-align: center; }
 .text-muted { color: var(--text-muted); }
 .text-main { color: var(--text-main)}
+.text-right { text-align: right; }
 .font-bold { font-weight: 600; }
 .no-decoration { text-decoration: none; color: inherit; }
 
@@ -597,4 +605,95 @@ input:focus {
     color: var(--text-muted);
     font-size: 0.9rem;
     margin: 0 15px;
+}
+/* =========================================
+   ADMIN CONSOLE SPECIFIC STYLES
+   ========================================= */
+
+/* Admin Header (Dark Mode Hero) */
+.admin-header {
+    background: var(--primary-dark);
+    color: white;
+    padding: 2rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 20px; /* Reduced slightly to fit sub-nav closely */
+}
+
+/* Sub-Navigation Tabs */
+.sub-nav {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.sub-nav-tab {
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px; /* Pulls the border down over the container's border */
+    transition: all 0.2s ease;
+}
+
+.sub-nav-tab:hover {
+    color: var(--primary-dark);
+    border-bottom-color: #cbd5e0;
+}
+
+.sub-nav-tab.active {
+    color: var(--brand-orange);
+    border-bottom-color: var(--brand-orange);
+}
+
+/* Metric Cards */
+.metric-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    border-left: 5px solid var(--primary-dark);
+    box-shadow: var(--shadow-subtle);
+}
+.metric-val {
+    font-family: var(--font-code), monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+.metric-label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Progress Bar */
+.progress-container {
+    background-color: #EDF2F7;
+    border-radius: 20px;
+    height: 24px;
+    width: 100%;
+    margin: 15px 0;
+    overflow: hidden;
+}
+.progress-fill {
+    background-color: var(--success-color);
+    height: 100%;
+    border-radius: 20px 0 0 20px;
+    transition: width 1s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: 0.75rem;
+    color: white;
+    font-weight: 700;
+}
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-family: var(--font-code), monospace;
 }

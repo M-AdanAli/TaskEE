@@ -68,16 +68,19 @@ public class UserDaoJDBCImpl implements UserDAO{
         return Optional.empty();
     }
 
-    // TODO: Have to rethink the existence of this method
     @Override
-    public List<User> findAll() throws SQLException{
+    public List<User> findAll(int limit, int offset) throws SQLException{
         List<User> users = new ArrayList<>();
         try (Connection connection = DBConnectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UserQuery.FIND_ALL.getQuery());
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+             PreparedStatement preparedStatement = connection.prepareStatement(UserQuery.FIND_ALL.getQuery())) {
 
-            while (resultSet.next()) {
-                users.add(mapResultSetToUser(resultSet));
+            // SELECT * FROM users ORDER BY created_at ASC LIMIT ? OFFSET ?
+            preparedStatement.setInt(1,limit);
+            preparedStatement.setInt(2,offset);
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                while (resultSet.next()) {
+                    users.add(mapResultSetToUser(resultSet));
+                }
             }
         }
         return users;
@@ -93,6 +96,20 @@ public class UserDaoJDBCImpl implements UserDAO{
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setBoolean(3, user.isActive());
             preparedStatement.setLong(4, user.getId());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) throw new SQLException("Failed to Update the User, No rows affected.");
+        }
+    }
+
+    @Override
+    public void updateStatus(Long userId, boolean isActive) throws SQLException {
+        try (Connection connection = DBConnectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UserQuery.UPDATE_STATUS.getQuery())) {
+
+            // UPDATE users SET is_active = ? WHERE id = ?
+            preparedStatement.setBoolean(1, isActive);
+            preparedStatement.setLong(2, userId);
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) throw new SQLException("Failed to Update the User, No rows affected.");
@@ -124,6 +141,20 @@ public class UserDaoJDBCImpl implements UserDAO{
                 return resultSet.next();
             }
         }
+    }
+
+    @Override
+    public long countAllUsers() throws SQLException {
+        try (Connection connection = DBConnectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UserQuery.COUNT_ALL.getQuery())){
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()){
+                    return resultSet.getLong(1);
+                }
+            }
+        }
+        return 0;
     }
 
     private User mapResultSetToUser(ResultSet resultSet) throws SQLException {

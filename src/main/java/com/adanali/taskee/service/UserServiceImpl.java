@@ -3,15 +3,17 @@ package com.adanali.taskee.service;
 import com.adanali.taskee.dao.UserDAO;
 import com.adanali.taskee.dao.UserDaoJDBCImpl;
 import com.adanali.taskee.domain.User;
-import com.adanali.taskee.exception.AuthenticationException;
-import com.adanali.taskee.exception.ServiceException;
-import com.adanali.taskee.exception.UserAlreadyExistsException;
-import com.adanali.taskee.exception.UserNotFoundException;
+import com.adanali.taskee.domain.enums.Role;
+import com.adanali.taskee.dto.Page;
+import com.adanali.taskee.dto.SessionUser;
+import com.adanali.taskee.dto.UserSummary;
+import com.adanali.taskee.exception.*;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService{
@@ -55,7 +57,7 @@ public class UserServiceImpl implements UserService{
             Optional<User> optionalUser = userDAO.findByEmail(email);
 
             if (optionalUser.isEmpty()){
-                throw new AuthenticationException("Invalid E-mail (%s)".formatted(email));
+                throw new AuthenticationException("Invalid E-mail or Password");
             }
 
             User user = optionalUser.get();
@@ -63,10 +65,34 @@ public class UserServiceImpl implements UserService{
                 if (user.isActive()){
                     LOGGER.info("Successfully logged in the User with E-mail: {} !", email);
                     return user;
-                }else throw new AuthenticationException("Your account has been deactivated by the Admin.");
-            }else throw new AuthenticationException("Invalid Password.");
+                }else throw new AuthenticationException("Your account has been deactivated by the Admin");
+            }else throw new AuthenticationException("Invalid E-mail or Password");
         }catch (SQLException e){
             throw new ServiceException("DATABASE ERROR: While authenticating User with E-mail %s: %s".formatted(email, e.getMessage()), e);
+        }
+    }
+
+    @Override
+    public Page<UserSummary> getAll(SessionUser requester, int page, int size) {
+        LOGGER.info("Attempting to FETCH All Users on request of Admin#{} ", requester.id());
+
+        if (!requester.role().equals(Role.ADMIN)) throw new AuthorizationException("Access Denied: Only administrators can view the user list.");
+        try {
+            long totalUsers = userDAO.countAllUsers();
+            long totalPages = (int) Math.ceil((double) totalUsers / size);
+            if (totalPages == 0) totalPages = 1;
+            if (page < 1 || page > totalPages) page = 1;
+
+            int offset = (page - 1) * size;
+            List<UserSummary> users = userDAO.findAll(size, offset)
+                    .stream()
+                    .map(user -> new UserSummary(user.getId(), user.getEmail(), user.getFullName(), user.getRole(), user.isActive(), user.getCreatedAt()))
+                    .toList();
+            LOGGER.info("Successfully FETCHED All Users on request of Admin#{} !",requester.id());
+
+            return new Page<>(users, page, totalPages, totalUsers );
+        } catch (SQLException e) {
+            throw new ServiceException("DATABASE ERROR: While FETCHING All Users on request of Admin#%s: %s".formatted(requester.id(), e.getMessage()), e);
         }
     }
 
@@ -89,6 +115,24 @@ public class UserServiceImpl implements UserService{
             throw new ServiceException("DATABASE ERROR: While UPDATING User#%s's Profile: %s".formatted(user.getId(), e.getMessage()), e);
         }
     }
+
+        @Override
+        public void updateStatus(Long targetUserId, boolean newStatus, SessionUser requester) {
+            LOGGER.info("Attempting to UPDATE Status of User#{} on request of Admin#{} ",targetUserId, requester.id());
+
+            if (!requester.role().equals(Role.ADMIN)) throw new AuthorizationException("Only administrators can toggle Users' status.");
+            if (targetUserId.equals(requester.id())) throw new AuthorizationException("Cannot deactivate yourself.");
+            try {
+                User targetUser = getById(targetUserId);
+                if (targetUser.getRole().equals(Role.ADMIN)){
+                    throw new AuthorizationException("Cannot change the status of another Administrator.");
+                }else {
+                    userDAO.updateStatus(targetUserId, newStatus);
+                }
+            } catch (SQLException e) {
+                throw new ServiceException("DATABASE ERROR: While UPDATING Status of User#%s on request of Admin#%s: %s".formatted(targetUserId, requester.id(), e.getMessage()), e);
+            }
+        }
 
     @Override
     public void changePassword(Long userId, String oldPassword, String newPassword) {

@@ -5,6 +5,7 @@ import com.adanali.taskee.dto.SessionUser;
 import com.adanali.taskee.exception.AuthenticationException;
 import com.adanali.taskee.service.UserService;
 import com.adanali.taskee.service.UserServiceImpl;
+import com.adanali.taskee.util.SessionRegistry;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -41,7 +42,7 @@ public class LoginController implements Controller{
 
         try {
             User user = userService.login(email,password);
-            SessionUser sessionUser = new SessionUser(user.getId(), user.getEmail(), user.getFullName(), user.getRole(), user.isActive());
+            SessionUser sessionUser = new SessionUser(user.getId(), user.getEmail(), user.getFullName(), user.getRole());
 
             HttpSession oldSession = request.getSession(false);
             if (oldSession != null) {
@@ -50,10 +51,11 @@ public class LoginController implements Controller{
 
             HttpSession newSession = request.getSession(true);
             newSession.setAttribute("currentUser", sessionUser);
+            SessionRegistry.addSession(sessionUser.id(), newSession);
 
             return "redirect:/dashboard";
         }catch (AuthenticationException e){
-            request.setAttribute("errorMessage","Invalid email or password.");
+            request.setAttribute("errorMessage",e.getMessage());
             request.setAttribute("email",email);
 
             return "login";
